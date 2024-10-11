@@ -1,11 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from api.main import api_router
 
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    generate_unique_id_function=custom_generate_unique_id,
-)
+app = FastAPI()
 
 # 添加CORS中间件
 app.add_middleware(
@@ -16,3 +13,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(api_router, prefix="/api/v1")

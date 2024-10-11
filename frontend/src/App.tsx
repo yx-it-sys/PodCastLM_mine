@@ -8,7 +8,8 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/process_text', { text: inputText });
+      const response = await axios.get('http://localhost:8000/api/v1/chat/');
+      console.log(response.data);
       setResult(response.data.message);
     } catch (error) {
       console.error('Error:', error);

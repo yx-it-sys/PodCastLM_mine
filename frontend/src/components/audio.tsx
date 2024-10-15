@@ -14,14 +14,21 @@ const playList = [
 
 export default function Audio() {
   return (
-    <div>
+    <div className="p-6">
       <Card>
-        <CardContent>
-          <div className="mt-4">
+        <CardContent className="p-2">
+          <div>
             <AudioPlayer
               playList={playList}
               activeUI={{
-                ...{all: true},
+                playButton: true,
+                prevNnext: true,
+                volume: true,
+                volumeSlider: true,
+                repeatType: true,
+                trackTime: true,
+                trackInfo: false,
+                artwork: true,
                 progress: "bar"
               }}
               placement={{

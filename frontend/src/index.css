@@ -2,3 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.gBtwiJ .interface-grid {
+  background: #fff !important;
+}
+
+:root {
+  --rm-audio-player-interface-container: #fff;
+}
+
+.kuNzeN img {
+  border-radius: 100% !important;
+}

@@ -1,17 +1,29 @@
-export default function Header() {
-  return (<>
-     <header className="flex justify-between items-center p-4 bg-gray-800">
-        <div className="flex items-center space-x-4">
-          <img src="/api/placeholder/32/32" alt="Meshy Logo" className="w-8 h-8" />
-          <nav className="flex space-x-4">
-            <a href="#" className="hover:text-gray-300">Image to 3D</a>
-            <a href="#" className="hover:text-gray-300">Community</a>
-            <a href="#" className="hover:text-gray-300">My Assets</a>
-          </nav>
+import { Button } from './ui/button'
+import { BsGithub, BsTwitterX } from "react-icons/bs";
+
+export default function NavBar() {
+  return (
+    <nav className="flex justify-between items-center p-4 bg-white border-b border-gray-200">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="flex items-center">
+          <a href="/" className="flex items-center gap-2">
+            {/* 如果有 logo，可以在这里添加 */}
+            <h1 className="text-xl font-bold text-gray-800">PodCast AI</h1>
+          </a>
         </div>
-        <div className="flex items-center space-x-4">
-          <span className="flex items-center"><img src="/api/placeholder/16/16" alt="Coin" className="w-4 h-4 mr-1" /> 210</span>
+        <div className="flex items-center">
+          <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-800">
+            <a href="https://github.com/YOYZHANG/ai-ppt" target="_blank" rel="noopener noreferrer" className="flex items-center">
+              <BsGithub className="w-5 h-5 mr-2" />
+            </a>
+          </Button>
+          <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-800">
+            <a href="https://x.com/alexu19049062" target="_blank" rel="noopener noreferrer" className="flex items-center">
+              <BsTwitterX className="w-5 h-5 mr-2" />
+            </a>
+          </Button>
         </div>
-      </header>
-  </>)
+      </div>
+    </nav>
+  )
 }

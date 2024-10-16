@@ -1,10 +1,52 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "./ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle, MessageSquare } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
+import { useEffect, useRef } from "react";
+import DialogueList from "./dialog-list";
 
-export default function Transcript() {
+interface TranscriptProps {
+  isSummaryLoading: boolean;
+  summaryError: string | null;
+  summaryTextChunk: string[];
+  isSummaryDone: boolean;
+  transcriptTextChunks: string[];
+  transcriptError: string | null;
+  transcriptIsLoading: boolean;
+  transcriptIsDone: boolean;
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+export default function Transcript({
+  isSummaryLoading,
+  summaryError,
+  summaryTextChunk,
+  transcriptTextChunks,
+  transcriptError,
+  transcriptIsLoading,
+  activeTab,
+  setActiveTab,
+}: TranscriptProps) {
+  const summaryContentRef = useRef<HTMLDivElement>(null);
+  const transcriptContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (summaryContentRef.current) {
+      summaryContentRef.current.scrollTop = summaryContentRef.current.scrollHeight;
+    }
+  }, [summaryTextChunk]);
+
+  useEffect(() => {
+    if (transcriptContentRef.current) {
+      transcriptContentRef.current.scrollTop = transcriptContentRef.current.scrollHeight;
+    }
+  }, [transcriptTextChunks]);
+
   return (
-    <div className="w-full p-6 overflow-y-auto">
-      <Tabs defaultValue="summary" className="w-full">
+    <div className="w-full p-6 overflow-hidden">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex justify-center mb-4">
           <TabsList className="inline-flex bg-gray-100 rounded-xl p-1">
             <TabsTrigger 
@@ -15,7 +57,7 @@ export default function Transcript() {
             </TabsTrigger>
             <TabsTrigger 
               value="transcript" 
-              className=" data-[state=active]:bg-white rounded-[5px] m-1"
+              className="data-[state=active]:bg-white rounded-[5px] m-1"
             >
               Transcript
             </TabsTrigger>
@@ -23,21 +65,74 @@ export default function Transcript() {
         </div>
         <TabsContent value="summary">
           <Card>
-            <CardContent className="p-8 h-[calc(100vh-450px)]">
-              <p>In this podcast episode, the hosts explore the complex interplay between powerful ideas and how we perceive them, drawing on Nietzsche's philosophical insights to examine their relevance to contemporary ideology, communication, and morality. Peterson argues that while ideas can inspire and bring people together, they also have the potential to lead to chaos if they're based on flawed premises. The conversation touches on themes like sacrifice, the importance of being in tune with reality, and the influence of personal experiences. Ultimately, the episode highlights the need for careful discernment in recognizing truly unifying ideas, encouraging listeners to confront their moral dilemmas and pursue meaningful self-improvement despite societal challenges.</p>
-              <h3 className="font-semibold mt-4 mb-2">Takeaways</h3>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>Jordan Peterson's writing style and approach are heavily influenced by Nietzsche, particularly Nietzsche's succinct and aphoristic style. He finds Nietzsche's work endlessly analyzable, with every sentence worthy of deep consideration.</li>
-                <li>Great writers, like Nietzsche and Mircea Eliade, craft writing that evokes deep imagery, adding a layer of meaning beyond the literal words. This imagistic quality profoundly affects perception and action in the reader.</li>
-                <li>Perception is not passive; it's inherently active and value-saturated, shaped</li>
-              </ul>
+            <CardContent className="p-8 h-[calc(100vh-450px)] overflow-y-auto" ref={summaryContentRef}>
+              {
+                renderContent(
+                  isSummaryLoading,
+                  summaryError,
+                  summaryTextChunk,
+                )}
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="transcript">
-          {/* Transcript content */}
+          <Card>
+            <CardContent className="p-8 h-[calc(100vh-450px)] overflow-y-auto" ref={transcriptContentRef}>
+              <DialogueList
+                textChunks={transcriptTextChunks}
+                transcriptError={transcriptError}
+                transcriptIsLoading={transcriptIsLoading}
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
+  )
+}
+
+function renderContent(isLoading: boolean, error: string | null, textChunks: string[]) {
+  return (
+    <>
+      {isLoading ? (
+        <div className="space-y-4">
+          <Skeleton className="h-6 w-full rounded-xl" />
+          <Skeleton className="h-6 w-3/4 rounded-xl" />
+          <Skeleton className="h-6 w-5/6 rounded-xl" />
+          <Skeleton className="h-6 w-2/3 rounded-xl" />
+          <Skeleton className="h-6 w-2/3 rounded-xl" />
+          <Skeleton className="h-6 w-2/3 rounded-xl" />
+          {Array.from({ length: 6 }).map((_) => (
+            <div className="flex items-center space-x-4">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-[250px] rounded-xl" />
+                </div>
+              </div>
+          ))}
+        </div>
+      ) : error ? (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            {error || "An error occurred while loading the summary."}
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <div className="prose max-w-none h-full">
+          {textChunks.length > 0 ? (
+            <ReactMarkdown>{textChunks.join('')}</ReactMarkdown>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-center p-8">
+              <MessageSquare className="w-16 h-16 text-gray-400 mb-4" />
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">No conversation yet</h3>
+              <p className="text-gray-500 mb-6">Start a new conversation to see the summary here.</p>
+            </div>
+          )}
+        </div>
+      )
+    }
+    </>
   )
 }

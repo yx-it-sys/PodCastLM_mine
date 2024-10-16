@@ -3,9 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Upload, FileText, Mic, Clock, Globe } from "lucide-react";
-import axios from 'axios';
 
-export default function Menu() {
+export default function Menu({ handleGenerate }: { handleGenerate: () => void }) {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [textInput, setTextInput] = useState('');
   const [tone, setTone] = useState('funny');
@@ -19,18 +18,15 @@ export default function Menu() {
   };
 
   const handleSubmit = () => {
-    const formData = {
-      pdfFile,
-      textInput,
-      tone,
-      duration,
-      language
-    };
+    // const formData = {
+    //   pdfFile,
+    //   textInput,
+    //   tone,
+    //   duration,
+    //   language
+    // };
 
-    console.log('Form data:', formData);
-    axios.post('/api/generate', formData)
-      .then(response => console.log(response))
-      .catch(error => console.error(error));
+    handleGenerate();
   };
 
   return (

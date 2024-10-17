@@ -27,7 +27,7 @@ export default function Transcript({
   transcriptError,
   transcriptIsLoading,
   activeTab,
-  setActiveTab,
+  setActiveTab
 }: TranscriptProps) {
   const summaryContentRef = useRef<HTMLDivElement>(null);
   const transcriptContentRef = useRef<HTMLDivElement>(null);
@@ -102,8 +102,8 @@ function renderContent(isLoading: boolean, error: string | null, textChunks: str
           <Skeleton className="h-6 w-2/3 rounded-xl" />
           <Skeleton className="h-6 w-2/3 rounded-xl" />
           <Skeleton className="h-6 w-2/3 rounded-xl" />
-          {Array.from({ length: 6 }).map((_) => (
-            <div className="flex items-center space-x-4">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div className="flex items-center space-x-4" key={index}>
                 <Skeleton className="h-4 w-4 rounded-full" />
                 <div className="space-y-2">
                   <Skeleton className="h-6 w-[250px] rounded-xl" />

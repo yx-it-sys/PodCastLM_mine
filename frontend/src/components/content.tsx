@@ -1,7 +1,7 @@
 import Episode from "./episode";
 import Audio from "./audio";
 import Transcript from "./transcript";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BASE_URL } from "@/lib/constant";
 import { useJsonData } from "@/hooks/useJsonData";
 import { useStreamText } from "@/hooks/useStreamText";
@@ -18,8 +18,13 @@ interface ContentProps {
   isPodInfoLoading: boolean;
   podInfoError: string | null;
   isPodInfoDone: boolean;
+  setIsGenerating: (isGenerating: boolean) => void;
+  formData: FormData
+  activeTab: string;
+  setActiveTab: (activeTab: string) => void;
 }
 export default function Content({
+  formData,
   podInfoData,
   isPodInfoLoading,
   podInfoError,
@@ -27,9 +32,10 @@ export default function Content({
   isSummaryLoading,
   summaryError,
   isSummaryDone,
+  setIsGenerating,
+  activeTab,
+  setActiveTab,
 }: ContentProps) {
-  const [activeTab, setActiveTab] = useState("summary")
-
   const {
     data: audioData,
     error: audioError,
@@ -48,17 +54,36 @@ export default function Content({
 
   useEffect(() => {
     if (isSummaryDone) {
-      setActiveTab("transcript");
-      transcriptFetchStreamText(`${BASE_URL}/generate_transcript`);
+      const timer = setTimeout(() => {
+        transcriptFetchStreamText(`${BASE_URL}/generate_transcript`, formData);
+        setActiveTab("transcript");
+      }, 1000);
+
+      // 清理函数，以防组件在定时器触发前卸载
+      return () => clearTimeout(timer);
     }
   }, [isSummaryDone]);
   
 
   useEffect(() => {
     if (transcriptFinalResult) {
-      audioFetchJsonData(`${BASE_URL}/generate_audio`)
+      const audioFormData = new FormData();
+      audioFormData.append('text', transcriptFinalResult.content);
+      audioFormData.append('language', formData.get('language') as string);
+      audioFetchJsonData(`${BASE_URL}/generate_audio`, audioFormData);
     }
   }, [transcriptFinalResult])
+
+  useEffect(() => {
+    if ((audioData)
+        || audioError
+        || summaryError
+        || podInfoError
+        || transcriptError
+      ) {
+      setIsGenerating(false);
+    }
+  }, [audioData, audioError, summaryError, podInfoError, transcriptError]);
 
   return (
     <div className="flex-1 flex flex-col h-screen">

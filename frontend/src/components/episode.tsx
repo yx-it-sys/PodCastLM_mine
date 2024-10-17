@@ -4,7 +4,7 @@ import { AlertCircle } from "lucide-react"
 
 interface EpisodeProps {
   isPodInfoLoading: boolean;
-  podInfoError: Error | null;
+  podInfoError: string | null;
   podInfoData: {
     title: string;
     host_name: string;

@@ -35,22 +35,35 @@ export function useStreamText() {
     }
   }, []);
 
-  const fetchStreamText = useCallback(async (url: string) => {
+  const fetchStreamText = useCallback(async (url: string, formData: FormData) => {
     setIsLoading(true);
     setTextChunks([]);
     setFinalResult(null);
     setError(null);
     setIsDone(false);  // 重置 isDone 状态
 
+    if (!formData) {
+      setError('FormData is null');
+      setIsDone(true);
+      return;
+    }
+
     try {
       console.log('fetching')
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const reader = response.body!.getReader();
       const decoder = new TextDecoder();
-
       let buffer = '';
       while (true) {
         const { done, value } = await reader.read();
+
         if (done) {
           setIsDone(true);  // 流结束时设置 isDone 为 true
           break;
@@ -66,6 +79,7 @@ export function useStreamText() {
           try {
             const data = JSON.parse(line);
             handleStreamData(data);
+            setIsLoading(false);
           } catch (error) {
             console.error('Error parsing JSON:', error);
           }

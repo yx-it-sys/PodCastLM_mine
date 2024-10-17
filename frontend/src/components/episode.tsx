@@ -34,7 +34,7 @@ export default function Episode({ isPodInfoLoading, podInfoError, podInfoData }:
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-                {podInfoError.message || "An error occurred while loading the episode data."}
+                {podInfoError || "An error occurred while loading the episode data."}
             </AlertDescription>
           </Alert>
         )

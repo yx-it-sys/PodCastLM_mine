@@ -1,7 +1,8 @@
 import AudioPlayer from "react-modern-audio-player";
 import { Card, CardContent } from "./ui/card";
 import { HOST_URL } from "@/lib/constant";
-import { AlertCircle, Headphones, Loader2 } from "lucide-react";
+import { AlertCircle, Download, Headphones, Loader2, MoreVertical } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 export default function Audio({ audioUrl, isAudioLoading, audioError }: { audioUrl: string | null, isAudioLoading: boolean, audioError: string | null }) {
   const playList = [
@@ -11,6 +12,19 @@ export default function Audio({ audioUrl, isAudioLoading, audioError }: { audioU
       id: 1,
     },
   ];
+
+  const handleDownload = () => {
+    const audioUrl = playList[0]?.src;
+    if (audioUrl) {
+      const link = document.createElement('a');
+      link.href = audioUrl;
+      link.target = '_blank';
+      link.download = 'audio.mp3';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -32,28 +46,45 @@ export default function Audio({ audioUrl, isAudioLoading, audioError }: { audioU
               <p>音频生成失败: {audioError}</p>
             </div>
           ) : audioUrl ? (
-            <AudioPlayer
-              playList={playList}
-              activeUI={{
-                playButton: true,
-                prevNnext: true,
-                volume: true,
-                volumeSlider: true,
-                repeatType: true,
-                trackTime: true,
-                trackInfo: false,
-                artwork: true,
-                progress: "bar"
-              }}
-              placement={{
-                player: "static",
-                playList: "top",
-              }}
-              rootContainerProps={{
-                colorScheme: "light",
-                width: "100%"
-              }}
-            />
+            <div className="flex justify-between items-center">
+              <AudioPlayer
+                playList={playList}
+                activeUI={{
+                  playButton: true,
+                  prevNnext: true,
+                  volume: true,
+                  volumeSlider: true,
+                  repeatType: true,
+                  trackTime: true,
+                  trackInfo: false,
+                  artwork: true,
+                  progress: "bar"
+                }}
+                placement={{
+                  player: "static",
+                  playList: "top",
+                }}
+                rootContainerProps={{
+                  colorScheme: "light",
+                  width: "100%"
+                }}
+              />
+              <div className="flex justify-end items-center mb-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="p-2 rounded-full hover:bg-gray-200 transition-colors">
+                      <MoreVertical className="w-5 h-5" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleDownload}>
+                      <Download className="w-4 h-4 mr-2 bg-white" />
+                      Download
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
           ) : (
             <>
               <div className="rounded-lg p-4 flex items-center">

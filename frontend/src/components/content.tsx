@@ -40,11 +40,13 @@ export default function Content({
     data: audioData,
     error: audioError,
     isLoading: isAudioLoading,
+    // @ts-ignore
     fetchJsonData: audioFetchJsonData
   } = useJsonData();
 
   const {
     textChunks: transcriptTextChunks,
+    // @ts-ignore
     finalResult: transcriptFinalResult,
     error: transcriptError,
     isLoading: transcriptIsLoading,

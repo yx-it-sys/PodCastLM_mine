@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Upload, FileText, Mic, Clock, Globe } from "lucide-react";
+import { Upload, FileText, Mic, Clock, Globe, Sparkles } from "lucide-react";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 const DEMO_PDF_URL = '/demo.pdf'; // 替换为你的演示 PDF 文件的实际路径
@@ -108,7 +108,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
           <h2 className="text-lg font-semibold mb-3 flex items-center"><Mic className="mr-2 text-gray-600" size={20} /> Tone</h2>
           <Select onValueChange={setTone}>
             <SelectTrigger className="w-full bg-gray-50 border-gray-200 text-gray-800 rounded-xl">
-              <SelectValue placeholder={tone} defaultValue={tone}/>
+              <SelectValue placeholder="Neutral" defaultValue={tone}/>
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl" >
               <SelectItem value="neutral" className="cursor-pointer hover:bg-gray-100">Neutral</SelectItem>
@@ -123,7 +123,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
           <h2 className="text-lg font-semibold mb-3 flex items-center"><Clock className="mr-2 text-gray-600" size={20} /> Duration</h2>
           <Select onValueChange={setDuration}>
             <SelectTrigger className="w-full bg-gray-50 border-gray-200 text-gray-800 rounded-xl">
-              <SelectValue placeholder={duration} defaultValue={duration}/>
+              <SelectValue placeholder="Short (1-2min)" defaultValue={duration}/>
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl">
               <SelectItem value="short" className="cursor-pointer  hover:bg-gray-100">Short (1-2min)</SelectItem>
@@ -149,14 +149,18 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
       <div className="mt-6">
         <Button 
           disabled={isGenerating}
-          className={`w-full rounded-xl transition-all duration-300 transform hover:scale-105 cursor-pointer${
-            isGenerating 
-              ? 'bg-gray-400 cursor-not-allowed' 
-              : 'bg-gray-800 hover:bg-gray-900'
-          } text-white`}
+          className={`
+            w-full rounded-xl transition-all duration-300 transform hover:scale-105
+            flex items-center justify-center space-x-2
+            ${isGenerating 
+              ? 'bg-blue-300 cursor-not-allowed' 
+              : 'bg-blue-500 hover:bg-blue-600 active:bg-blue-700'}
+            text-white font-semibold py-3 px-6 shadow-lg hover:shadow-xl
+          `}
           onClick={handleSubmit}
         >
-           {isGenerating ? 'Generating...' : 'Generate'}
+          {!isGenerating && <Sparkles className="w-5 h-5" />}
+          <span>{isGenerating ? 'Generating...' : 'Generate'}</span>
         </Button>
       </div>
     </div>

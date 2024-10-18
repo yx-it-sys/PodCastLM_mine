@@ -65,14 +65,14 @@ export default function Content({
   }, [isSummaryDone]);
   
 
-  useEffect(() => {
-    if (transcriptFinalResult) {
-      const audioFormData = new FormData();
-      audioFormData.append('text', transcriptFinalResult.content);
-      audioFormData.append('language', formData.get('language') as string);
-      audioFetchJsonData(`${BASE_URL}/generate_audio`, audioFormData);
-    }
-  }, [transcriptFinalResult])
+  // useEffect(() => {
+  //   if (transcriptFinalResult) {
+  //     const audioFormData = new FormData();
+  //     audioFormData.append('text', transcriptFinalResult.content);
+  //     audioFormData.append('language', formData.get('language') as string);
+  //     audioFetchJsonData(`${BASE_URL}/generate_audio`, audioFormData);
+  //   }
+  // }, [transcriptFinalResult])
 
   useEffect(() => {
     if ((audioData)

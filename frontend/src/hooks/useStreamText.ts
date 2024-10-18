@@ -54,9 +54,6 @@ export function useStreamText() {
         method: 'POST',
         body: formData,
       });
-
-      console.log(response, 'response')
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -79,8 +76,7 @@ export function useStreamText() {
           if (line.trim() === '') continue;
           
           try {
-            const data = JSON.parse(line);
-            console.log(data, 'data')
+            const data = JSON.parse(line)
             handleStreamData(data);
             setIsLoading(false);
           } catch (error) {

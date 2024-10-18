@@ -10,7 +10,7 @@ interface DialogueListProps {
 
 const DialogueList: React.FC<DialogueListProps> = ({ textChunks, transcriptError, transcriptIsLoading }) => {
   const parseDialogue = (text: string) => {
-    const dialogueRegex = /\*\*(.*?)\*\*:\s*((?:(?!\*\*).)*)/gs;
+    const dialogueRegex = /\*\*([\s\S]*?)\*\*[:：]\s*([\s\S]*?)(?=\*\*|$)/g;
     const matches = Array.from(text.matchAll(dialogueRegex));
     
     return matches.map(match => ({
@@ -48,7 +48,7 @@ const DialogueList: React.FC<DialogueListProps> = ({ textChunks, transcriptError
           key={index}
           speaker={item.speaker}
           content={item.content}
-          isUser={item.speaker === 'Host'}
+          isUser={item.speaker === '主持人' || item.speaker === 'Host'}
         />
       ))}
       {transcriptIsLoading && (

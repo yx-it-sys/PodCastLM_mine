@@ -40,13 +40,11 @@ export default function Content({
     data: audioData,
     error: audioError,
     isLoading: isAudioLoading,
-    // @ts-ignore
     fetchJsonData: audioFetchJsonData
   } = useJsonData();
 
   const {
     textChunks: transcriptTextChunks,
-    // @ts-ignore
     finalResult: transcriptFinalResult,
     error: transcriptError,
     isLoading: transcriptIsLoading,
@@ -62,14 +60,14 @@ export default function Content({
   }, [isSummaryDone]);
   
 
-  // useEffect(() => {
-  //   if (transcriptFinalResult) {
-  //     const audioFormData = new FormData();
-  //     audioFormData.append('text', transcriptFinalResult.content);
-  //     audioFormData.append('language', formData.get('language') as string);
-  //     audioFetchJsonData(`${BASE_URL}/generate_audio`, audioFormData);
-  //   }
-  // }, [transcriptFinalResult])
+  useEffect(() => {
+    if (transcriptFinalResult) {
+      const audioFormData = new FormData();
+      audioFormData.append('text', transcriptFinalResult.content);
+      audioFormData.append('language', formData.get('language') as string);
+      audioFetchJsonData(`${BASE_URL}/generate_audio`, audioFormData);
+    }
+  }, [transcriptFinalResult])
 
   useEffect(() => {
     if ((audioData)

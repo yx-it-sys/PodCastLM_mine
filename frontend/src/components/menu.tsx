@@ -12,7 +12,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
   const [textInput, setTextInput] = useState('');
   const [tone, setTone] = useState('neutral');
   const [duration, setDuration] = useState('short');
-  const [language, setLanguage] = useState('English');
+  const [language, setLanguage] = useState('Chinese');
   const [fileError, setFileError] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +63,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
     <div className="w-full md:w-1/5 p-6 border-r rounded-2xl m-3 border-gray-200 bg-[rgb(240,240,240)] flex flex-col text-gray-800 hidden md:flex shadow-xl shadow-gray-600/50">
       <div className="flex-grow overflow-y-auto space-y-8">
         <div className="transition-all duration-300">
-          <h2 className="text-lg font-semibold mb-3 flex items-center"><Upload className="mr-2 text-gray-600" size={20} /> Upload PDF *</h2>
+          <h2 className="text-sm font-semibold mb-3 flex items-center"><Upload className="mr-2 text-gray-600" size={20} /> 上传 PDF *</h2>
           <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-gray-400 bg-white hover:bg-gray-50 transition-all duration-300">
             <input 
               type="file" 
@@ -74,20 +74,20 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
             />
             <label htmlFor="pdf-upload" className="cursor-pointer">
               <FileText className="mx-auto h-12 w-12 text-gray-400" />
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm font-semibold text-gray-600">
                 {pdfFile ? pdfFile.name : "Click to upload PDF"}
               </p>
               <p className="mt-1 text-xs text-gray-500">
-                PDF file size should not exceed 5MB
+                PDF 文件不应超过 5MB
               </p>
             </label>
           </div>
           {fileError && <p className="text-red-500">{fileError}</p>}
           <div className="flex items-center space-x-2 pt-2">
-            <span className="text-sm text-gray-500">Try Demo: </span>
+            <span className="text-sm font-semibold text-gray-500">试一试: </span>
             <button
               onClick={handleDemoPdfClick}
-              className="text-sm  underline"
+              className="text-sm  font-semibold underline"
             >
               introduce_chatgpt.pdf
             </button>
@@ -95,52 +95,52 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold mb-3 flex items-center"><FileText className="mr-2 text-gray-600" size={20} /> Text Input</h2>
+          <h2 className="text-sm font-semibold mb-3 flex items-center"><FileText className="mr-2 text-gray-600" size={20} /> 描述</h2>
           <Textarea 
             style={{"resize": "none"}}
-            placeholder="Enter your text here..." 
+            placeholder="说点什么..." 
             className="w-full h-40 bg-white border-gray-200 text-gray-800 rounded-xl focus:border-gray-400 focus:ring-gray-400"
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}
           />
         </div>
         <div>
-          <h2 className="text-lg font-semibold mb-3 flex items-center"><Mic className="mr-2 text-gray-600" size={20} /> Tone</h2>
+          <h2 className="text-sm font-semibold mb-3 flex items-center"><Mic className="mr-2 text-gray-600" size={20} /> 语气</h2>
           <Select onValueChange={setTone}>
             <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
-              <SelectValue placeholder="Neutral" defaultValue={tone}/>
+              <SelectValue placeholder="中立" defaultValue={tone}/>
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl" >
-              <SelectItem value="neutral" className="cursor-pointer hover:bg-gray-100">Neutral</SelectItem>
-              <SelectItem value="happy" className="cursor-pointer hover:bg-gray-100">Happy</SelectItem>
-              <SelectItem value="sad" className="cursor-pointer hover:bg-gray-100">Sad</SelectItem>
-              <SelectItem value="excited" className="cursor-pointer hover:bg-gray-100">Excited</SelectItem>
+              <SelectItem value="neutral" className="cursor-pointer hover:bg-gray-100">中立</SelectItem>
+              <SelectItem value="happy" className="cursor-pointer hover:bg-gray-100">开心</SelectItem>
+              <SelectItem value="sad" className="cursor-pointer hover:bg-gray-100">难过</SelectItem>
+              <SelectItem value="excited" className="cursor-pointer hover:bg-gray-100">兴奋</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold mb-3 flex items-center"><Clock className="mr-2 text-gray-600" size={20} /> Duration</h2>
+          <h2 className="text-sm font-semibold mb-3 flex items-center"><Clock className="mr-2 text-gray-600" size={20} /> 时长</h2>
           <Select onValueChange={setDuration}>
             <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
-              <SelectValue placeholder="Short (1-2min)" defaultValue={duration}/>
+              <SelectValue placeholder="短对话 (1-2分钟)" defaultValue={duration}/>
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl">
-              <SelectItem value="short" className="cursor-pointer  hover:bg-gray-100">Short (1-2min)</SelectItem>
-              <SelectItem value="medium" className="cursor-pointer hover:bg-gray-100">Medium (3-4min)</SelectItem>
+              <SelectItem value="short" className="cursor-pointer  hover:bg-gray-100">短对话 (1-2分钟)</SelectItem>
+              <SelectItem value="medium" className="cursor-pointer hover:bg-gray-100">中对话 (3-5分钟)</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold mb-3 flex items-center"><Globe className="mr-2 text-gray-600" size={20} /> Language</h2>
+          <h2 className="text-sm font-semibold mb-3 flex items-center"><Globe className="mr-2 text-gray-600" size={20} /> 语言</h2>
           <Select onValueChange={setLanguage}>
             <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
-              <SelectValue placeholder={language} defaultValue={language}/>
+              <SelectValue placeholder="中文" defaultValue={language}/>
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl">
-              <SelectItem value="English" className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-gray-100">English</SelectItem>
-              <SelectItem value="Chinese" className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-gray-100">Chinese</SelectItem>
+              <SelectItem value="English" className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-gray-100">英文</SelectItem>
+              <SelectItem value="Chinese" className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-gray-100">中文</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -160,7 +160,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
           onClick={handleSubmit}
         >
           {!isGenerating && <Sparkles className="w-5 h-5" />}
-          <span>{isGenerating ? 'Generating...' : 'Generate'}</span>
+          <span>{isGenerating ? '生成中...' : '生成播客'}</span>
         </Button>
       </div>
     </div>

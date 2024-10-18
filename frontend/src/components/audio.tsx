@@ -92,8 +92,8 @@ export default function Audio({ audioUrl, isAudioLoading, audioError }: { audioU
                   <Headphones className="w-6 h-6 text-blue-500" />
                 </div>
                 <div>
-                  <p className="text-gray-800 font-medium">No audio available</p>
-                  <p className="text-gray-500 text-sm">Start a new conversation to see the audio here.</p>
+                  <p className="text-gray-800 font-medium">音频无</p>
+                  <p className="text-gray-500 text-sm">来生成一段音频播客吧.</p>
                 </div>
               </div>
             </>

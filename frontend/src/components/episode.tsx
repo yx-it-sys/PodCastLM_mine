@@ -42,8 +42,8 @@ export default function Episode({ isPodInfoLoading, podInfoError, podInfoData }:
       {
         !isPodInfoLoading && !podInfoError && (
           <div className="flex-1 h-40 flex flex-col">
-            <h2 className="text-xl font-bold my-2">{podInfoData?.title || "Episode Title"}</h2>
-          <p className="text-sm text-gray-600">Author: {podInfoData?.host_name || "Unknown"}</p>
+            <h2 className="text-xl font-bold my-2">{podInfoData?.title || "播客标题"}</h2>
+          <p className="text-sm text-gray-600">作者: {podInfoData?.host_name || "未知"}</p>
         </div>
       )}
     </div>

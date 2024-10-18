@@ -127,18 +127,15 @@ function renderContent(isLoading: boolean, error: string | null, textChunks: str
           {textChunks.length > 0 ? (
             <ReactMarkdown className="p-8">{textChunks.join('')}</ReactMarkdown>
           ) : (
-            <div className="relative flex flex-col items-center justify-center h-full text-center relative overflow-hidden hover:scale-105">
+            <div className="relative flex flex-col items-center justify-center h-full text-center relative overflow-hidden">
               <div className="transform transition-all duration-500">
                 <div className="group flex items-center justify-center">
-                  <Podcast className="w-16 h-16 text-blue-500 transition-all duration-300 group-hover:text-indigo-600 group-hover:rotate-12" />
+                  <Podcast className="w-16 h-16 text-gray-400 transition-all duration-300  group-hover:rotate-12" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3 animate-fade-in-up">尚未开张</h3>
                 <p className="text-gray-600 mb-6 max-w-md animate-fade-in-up animation-delay-150">
                    快来生成一个吧～
                 </p>
-              </div>
-              <div className="absolute left-[20%] bottom-[20%]">
-                <img src="/arrow.svg" alt="Podcast" width={100} height={100}/>
               </div>
             </div>
           )}

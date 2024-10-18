@@ -27,9 +27,9 @@ export default function Audio({ audioUrl, isAudioLoading, audioError }: { audioU
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 px-12">
       <Card>
-        <CardContent className="p-2">
+        <CardContent className="p-2 bg-[rgb(249,249,249)] rounded-xl">
           {isAudioLoading ? (
               <div className="rounded-lg p-4 flex items-center">
                 <div className="bg-blue-100 rounded-full p-2 mr-4">

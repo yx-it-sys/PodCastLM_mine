@@ -36,7 +36,7 @@ function App() {
   }
   return (
     <div className="h-screen flex flex-col">
-      <main className="flex-grow flex">
+      <main className="flex-grow flex bg-[rgb(220,220,220)]">
         <Menu
           handleGenerate={handleGenerate}
           isGenerating={isGenerating}

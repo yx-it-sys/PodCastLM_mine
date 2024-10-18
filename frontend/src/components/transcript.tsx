@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, MessageSquare } from "lucide-react";
+import { AlertCircle, Podcast } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import { useEffect, useRef } from "react";
 import DialogueList from "./dialog-list";
@@ -45,7 +45,7 @@ export default function Transcript({
   }, [transcriptTextChunks]);
 
   return (
-    <div className="w-full p-6 overflow-hidden">
+    <div className="w-full px-12 py-6 overflow-hidden">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex justify-center mb-4">
           <TabsList className="inline-flex bg-gray-100 rounded-xl p-1">
@@ -65,7 +65,10 @@ export default function Transcript({
         </div>
         <TabsContent value="summary">
           <Card>
-            <CardContent className="p-8 h-[calc(100vh-450px)] overflow-y-auto" ref={summaryContentRef}>
+            <CardContent
+              className={`h-[calc(100vh-500px)] overflow-y-auto bg-[rgb(249,249,249)] rounded-xl`}
+              ref={summaryContentRef}
+            >
               {
                 renderContent(
                   isSummaryLoading,
@@ -77,7 +80,7 @@ export default function Transcript({
         </TabsContent>
         <TabsContent value="transcript">
           <Card>
-            <CardContent className="p-8 h-[calc(100vh-450px)] overflow-y-auto" ref={transcriptContentRef}>
+            <CardContent className={`p-8 h-[calc(100vh-500px)] overflow-y-auto bg-[rgb(249,249,249)] rounded-xl`} ref={transcriptContentRef}>
               <DialogueList
                 textChunks={transcriptTextChunks}
                 transcriptError={transcriptError}
@@ -95,7 +98,7 @@ function renderContent(isLoading: boolean, error: string | null, textChunks: str
   return (
     <>
       {isLoading ? (
-        <div className="space-y-4">
+        <div className="space-y-4 p-8">
           <Skeleton className="h-6 w-full rounded-xl" />
           <Skeleton className="h-6 w-3/4 rounded-xl" />
           <Skeleton className="h-6 w-5/6 rounded-xl" />
@@ -112,7 +115,7 @@ function renderContent(isLoading: boolean, error: string | null, textChunks: str
           ))}
         </div>
       ) : error ? (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="p-8">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>
@@ -122,12 +125,21 @@ function renderContent(isLoading: boolean, error: string | null, textChunks: str
       ) : (
         <div className="prose max-w-none h-full">
           {textChunks.length > 0 ? (
-            <ReactMarkdown>{textChunks.join('')}</ReactMarkdown>
+            <ReactMarkdown className="p-8">{textChunks.join('')}</ReactMarkdown>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8">
-              <MessageSquare className="w-16 h-16 text-gray-400 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No conversation yet</h3>
-              <p className="text-gray-500 mb-6">Start a new conversation to see the summary here.</p>
+            <div className="relative flex flex-col items-center justify-center h-full text-center relative overflow-hidden hover:scale-105">
+              <div className="transform transition-all duration-500">
+                <div className="group flex items-center justify-center">
+                  <Podcast className="w-16 h-16 text-blue-500 transition-all duration-300 group-hover:text-indigo-600 group-hover:rotate-12" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-3 animate-fade-in-up">No Summary yet</h3>
+                <p className="text-gray-600 mb-6 max-w-md animate-fade-in-up animation-delay-150">
+                  Start a new conversation to see the summary here.
+                </p>
+              </div>
+              <div className="absolute left-[20%] bottom-[20%]">
+                <img src="/arrow.svg" alt="Podcast" width={100} height={100}/>
+              </div>
             </div>
           )}
         </div>

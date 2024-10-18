@@ -60,11 +60,11 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
   };
 
   return (
-    <div className="w-full md:w-1/4 p-6 border-r border-gray-200 bg-white flex flex-col h-full text-gray-800 hidden md:flex shadow-md shadow-gray-300/50">
+    <div className="w-full md:w-1/5 p-6 border-r rounded-2xl m-3 border-gray-200 bg-[rgb(240,240,240)] flex flex-col text-gray-800 hidden md:flex shadow-xl shadow-gray-600/50">
       <div className="flex-grow overflow-y-auto space-y-8">
         <div className="transition-all duration-300">
           <h2 className="text-lg font-semibold mb-3 flex items-center"><Upload className="mr-2 text-gray-600" size={20} /> Upload PDF *</h2>
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-all duration-300">
+          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-gray-400 bg-white hover:bg-gray-50 transition-all duration-300">
             <input 
               type="file" 
               accept=".pdf" 
@@ -99,7 +99,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
           <Textarea 
             style={{"resize": "none"}}
             placeholder="Enter your text here..." 
-            className="w-full h-40 bg-gray-50 border-gray-200 text-gray-800 rounded-xl focus:border-gray-400 focus:ring-gray-400"
+            className="w-full h-40 bg-white border-gray-200 text-gray-800 rounded-xl focus:border-gray-400 focus:ring-gray-400"
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}
           />
@@ -107,7 +107,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
         <div>
           <h2 className="text-lg font-semibold mb-3 flex items-center"><Mic className="mr-2 text-gray-600" size={20} /> Tone</h2>
           <Select onValueChange={setTone}>
-            <SelectTrigger className="w-full bg-gray-50 border-gray-200 text-gray-800 rounded-xl">
+            <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
               <SelectValue placeholder="Neutral" defaultValue={tone}/>
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl" >
@@ -122,7 +122,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
         <div>
           <h2 className="text-lg font-semibold mb-3 flex items-center"><Clock className="mr-2 text-gray-600" size={20} /> Duration</h2>
           <Select onValueChange={setDuration}>
-            <SelectTrigger className="w-full bg-gray-50 border-gray-200 text-gray-800 rounded-xl">
+            <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
               <SelectValue placeholder="Short (1-2min)" defaultValue={duration}/>
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl">
@@ -135,7 +135,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
         <div>
           <h2 className="text-lg font-semibold mb-3 flex items-center"><Globe className="mr-2 text-gray-600" size={20} /> Language</h2>
           <Select onValueChange={setLanguage}>
-            <SelectTrigger className="w-full bg-gray-50 border-gray-200 text-gray-800 rounded-xl">
+            <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
               <SelectValue placeholder={language} defaultValue={language}/>
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl">

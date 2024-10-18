@@ -14,7 +14,7 @@ interface EpisodeProps {
 export default function Episode({ isPodInfoLoading, podInfoError, podInfoData }: EpisodeProps) {
 
   return (
-    <div className="flex items-start bg-gradient-to-br from-blue-400/10 to-blue-800/10 p-8 rounded-lg shadow-sm shadow-gray-200/50">
+    <div className="flex items-start bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50  p-8 rounded-2xl shadow-sm shadow-gray-200/50 mx-12 my-4">
       <img 
         src="/cover1.png" 
         alt={podInfoData?.title || "Episode thumbnail"} 

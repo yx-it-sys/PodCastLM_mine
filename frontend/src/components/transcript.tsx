@@ -132,7 +132,7 @@ function renderContent(isLoading: boolean, error: string | null, textChunks: str
                 <div className="group flex items-center justify-center">
                   <Podcast className="w-16 h-16 text-gray-400 transition-all duration-300  group-hover:rotate-12" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-3 animate-fade-in-up">尚未开张</h3>
+                <h3 className="text-2xl font-bold text-gray-800 mb-3 animate-fade-in-up">暂无总结</h3>
                 <p className="text-gray-600 mb-6 max-w-md animate-fade-in-up animation-delay-150">
                    快来生成一个吧～
                 </p>

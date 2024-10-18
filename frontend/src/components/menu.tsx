@@ -60,7 +60,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
   };
 
   return (
-    <div className="w-full md:w-1/5 p-6 border-r rounded-2xl m-3 border-gray-200 bg-[rgb(240,240,240)] flex flex-col text-gray-800 hidden md:flex shadow-xl shadow-gray-600/50">
+    <div className="w-full md:w-1/5 p-6 border-r rounded-2xl m-3 border-gray-200 bg-white flex flex-col text-gray-800 hidden md:flex shadow-lg shadow-gray-300/50">
       <div className="flex-grow overflow-y-auto space-y-8">
         <div className="transition-all duration-300">
           <h2 className="text-sm font-semibold mb-3 flex items-center"><Upload className="mr-2 text-gray-600" size={20} /> 上传 PDF *</h2>
@@ -95,7 +95,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold mb-3 flex items-center"><FileText className="mr-2 text-gray-600" size={20} /> 描述</h2>
+          <h2 className="text-sm font-semibold mb-3 flex items-center"><FileText className="mr-2 text-gray-600" size={20} /> 问题</h2>
           <Textarea 
             style={{"resize": "none"}}
             placeholder="说点什么..." 

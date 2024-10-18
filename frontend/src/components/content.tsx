@@ -53,7 +53,7 @@ export default function Content({
   } = useStreamText();
 
   useEffect(() => {
-    if (isSummaryDone) {
+    if (isSummaryDone && !summaryError) {
       transcriptFetchStreamText(`${BASE_URL}/generate_transcript`, formData);
       setActiveTab("transcript");
     }

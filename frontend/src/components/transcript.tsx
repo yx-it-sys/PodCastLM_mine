@@ -66,7 +66,7 @@ export default function Transcript({
         <TabsContent value="summary">
           <Card>
             <CardContent
-              className={`h-[calc(100vh-500px)] overflow-y-auto bg-[rgb(249,249,249)] rounded-xl`}
+              className={`h-[calc(100vh-500px)] overflow-y-auto bg-[rgb(249,249,249)] rounded-xl box-content`}
               ref={summaryContentRef}
             >
               {
@@ -80,7 +80,7 @@ export default function Transcript({
         </TabsContent>
         <TabsContent value="transcript">
           <Card>
-            <CardContent className={`p-8 h-[calc(100vh-500px)] overflow-y-auto bg-[rgb(249,249,249)] rounded-xl`} ref={transcriptContentRef}>
+            <CardContent className={`p-8 h-[calc(100vh-500px)] overflow-y-auto bg-[rgb(249,249,249)] rounded-xl box-content`} ref={transcriptContentRef}>
               <DialogueList
                 textChunks={transcriptTextChunks}
                 transcriptError={transcriptError}
@@ -115,7 +115,7 @@ function renderContent(isLoading: boolean, error: string | null, textChunks: str
           ))}
         </div>
       ) : error ? (
-        <Alert variant="destructive" className="p-8">
+        <Alert variant="destructive" className="p-8 bg-red-100 text-red-700 flex items-center justify-center">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>

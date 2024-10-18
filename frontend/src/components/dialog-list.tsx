@@ -36,8 +36,7 @@ const DialogueList: React.FC<DialogueListProps> = ({ textChunks, transcriptError
     return (
       <div className="flex flex-col items-center justify-center h-full text-center p-8">
         <MessageSquare className="w-16 h-16 text-gray-400 mb-4" />
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">No Transcript yet</h3>
-        <p className="text-gray-500 mb-6">Start a new conversation to see the transcript here.</p>
+        <h3 className="text-xl font-semibold text-gray-700 mb-2">暂无脚本</h3>
       </div>
     );
   }

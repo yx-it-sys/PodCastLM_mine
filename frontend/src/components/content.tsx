@@ -56,13 +56,8 @@ export default function Content({
 
   useEffect(() => {
     if (isSummaryDone) {
-      const timer = setTimeout(() => {
-        transcriptFetchStreamText(`${BASE_URL}/generate_transcript`, formData);
-        setActiveTab("transcript");
-      }, 1000);
-
-      // 清理函数，以防组件在定时器触发前卸载
-      return () => clearTimeout(timer);
+      transcriptFetchStreamText(`${BASE_URL}/generate_transcript`, formData);
+      setActiveTab("transcript");
     }
   }, [isSummaryDone]);
   

@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export default function Audio({ audioUrl, isAudioLoading, audioError }: { audioUrl: string | null, isAudioLoading: boolean, audioError: string | null }) {
   const playList = [
     {
-      img: "/public/cover1.png",
+      img: "/cover1.png",
       src: audioUrl ? `${HOST_URL}${audioUrl}` : '',
       id: 1,
     },

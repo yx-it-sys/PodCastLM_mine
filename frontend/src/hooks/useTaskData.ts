@@ -26,7 +26,7 @@ export function useAudioGeneration() {
       const { task_id } = await response.json();
 
       while (true) {
-        await new Promise(resolve => setTimeout(resolve, 2000));  // 等待2秒
+        await new Promise(resolve => setTimeout(resolve, 10000));
 
         const statusResponse = await fetch(`${BASE_URL}/audio_status/${task_id}`);
         const status = await statusResponse.json();

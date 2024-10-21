@@ -27,7 +27,7 @@ export default function Audio({ audioUrl, isAudioLoading, audioError }: { audioU
   };
 
   return (
-    <div className="p-6 px-12">
+    <div className="p-2 px-12">
       <Card>
         <CardContent className="p-2 bg-[rgb(249,249,249)] rounded-xl">
           {isAudioLoading ? (

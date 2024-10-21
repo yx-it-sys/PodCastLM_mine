@@ -54,8 +54,6 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
     formData.append('duration', duration);
     formData.append('language', language);
 
-    console.log(formData);
-
     handleGenerate(formData);
   };
 

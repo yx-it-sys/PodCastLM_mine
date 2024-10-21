@@ -14,15 +14,15 @@ interface EpisodeProps {
 export default function Episode({ isPodInfoLoading, podInfoError, podInfoData }: EpisodeProps) {
 
   return (
-    <div className="flex items-start bg-gradient-to-br from-blue-100 via-purple-50 to-pink-50  p-8 rounded-2xl shadow-xl shadow-gray-200/50 mx-12 my-4">
+    <div className="flex items-start bg-gradient-to-br from-blue-100 via-purple-50 to-pink-50 p-4 rounded-2xl shadow-xl shadow-gray-200/50 mx-12 my-2">
       <img 
         src="/cover1.png" 
         alt={podInfoData?.title || "Episode thumbnail"} 
-        className="w-40 h-40 mr-4 bg-gray-300 rounded-2xl object-cover"
+        className="w-14 h-14 m-2 bg-gray-300 rounded-2xl object-cover"
       />
       {
         isPodInfoLoading && (
-          <div className="flex-1 h-40 flex flex-col">
+          <div className="flex-1 flex flex-col">
             <Skeleton className="h-6 my-2 w-3/4 rounded-xl" />
             <Skeleton className="h-6 w-1/2 rounded-xl" />
           </div>
@@ -41,7 +41,7 @@ export default function Episode({ isPodInfoLoading, podInfoError, podInfoData }:
       }
       {
         !isPodInfoLoading && !podInfoError && (
-          <div className="flex-1 h-40 flex flex-col">
+          <div className="flex-1 flex flex-col">
             <h2 className="text-xl font-bold my-2">{podInfoData?.title || "播客标题"}</h2>
           <p className="text-sm text-gray-600">主讲人: {podInfoData?.host_name || "未知"}</p>
         </div>

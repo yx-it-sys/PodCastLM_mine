@@ -27,7 +27,6 @@ export function useJsonData() {
 
       const jsonData = await response.json();
       setData(jsonData);
-      console.log(jsonData, 'jsonData')
     } catch (error) {
       setError('获取数据时发生错误: ' + (error as Error).message);
     } finally {

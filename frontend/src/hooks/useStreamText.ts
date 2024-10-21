@@ -49,7 +49,6 @@ export function useStreamText() {
     }
 
     try {
-      console.log('fetching')
       const response = await fetch(url, {
         method: 'POST',
         body: formData,

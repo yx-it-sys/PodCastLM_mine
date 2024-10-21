@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .gBtwiJ .interface-grid {
-  background: #fff !important;
+  background: rgba(249, 249, 249, 1) !important;
 }
 
 :root {

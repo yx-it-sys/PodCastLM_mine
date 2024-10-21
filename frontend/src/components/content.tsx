@@ -3,8 +3,8 @@ import Audio from "./audio";
 import Transcript from "./transcript";
 import { useEffect } from "react";
 import { BASE_URL } from "@/lib/constant";
-import { useJsonData } from "@/hooks/useJsonData";
 import { useStreamText } from "@/hooks/useStreamText";
+import { useAudioGeneration } from "@/hooks/useTaskData";
 
 interface ContentProps {
   summaryTextChunks: string[];
@@ -37,11 +37,11 @@ export default function Content({
   setActiveTab,
 }: ContentProps) {
   const {
-    data: audioData,
     error: audioError,
     isLoading: isAudioLoading,
-    fetchJsonData: audioFetchJsonData
-  } = useJsonData();
+    generateAudio,
+    audioUrl: audioData
+  } = useAudioGeneration();
 
   const {
     textChunks: transcriptTextChunks,
@@ -61,12 +61,15 @@ export default function Content({
   
 
   useEffect(() => {
-    if (transcriptFinalResult) {
-      const audioFormData = new FormData();
-      audioFormData.append('text', transcriptFinalResult.content);
-      audioFormData.append('language', formData.get('language') as string);
-      audioFetchJsonData(`${BASE_URL}/generate_audio`, audioFormData);
-    }
+    (async () => {
+      if (transcriptFinalResult) {
+        const audioFormData = new FormData();
+        audioFormData.append('text', transcriptFinalResult.content);
+        audioFormData.append('language', formData.get('language') as string);
+
+        generateAudio(audioFormData)
+      }
+    })()
   }, [transcriptFinalResult])
 
   useEffect(() => {
@@ -106,8 +109,7 @@ export default function Content({
       <div className="flex-shrink-0 flex-basis-auto">
         <Audio
           audioError={audioError}
-          // @ts-ignore
-          audioUrl={audioData?.audio_url}
+          audioUrl={audioData}
           isAudioLoading={isAudioLoading}
         />
       </div>

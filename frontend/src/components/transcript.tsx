@@ -48,7 +48,7 @@ export default function Transcript({
     <div className="w-full px-12 py-6 overflow-hidden">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex justify-center mb-4">
-          <TabsList className="inline-flex bg-gray-100 rounded-xl p-1">
+          <TabsList className="inline-flex bg-gray-200 rounded-xl p-1">
             <TabsTrigger 
               value="summary" 
               className="data-[state=active]:bg-white rounded-[5px] m-1"
@@ -64,9 +64,9 @@ export default function Transcript({
           </TabsList>
         </div>
         <TabsContent value="summary">
-          <Card>
+          <Card className="p-8 bg-[rgb(249,249,249)]">
             <CardContent
-              className={`h-[calc(100vh-500px)] overflow-y-auto bg-[rgb(249,249,249)] rounded-xl box-content`}
+              className={`h-[calc(100vh-400px)] overflow-y-auto`}
               ref={summaryContentRef}
             >
               {
@@ -79,8 +79,8 @@ export default function Transcript({
           </Card>
         </TabsContent>
         <TabsContent value="transcript">
-          <Card>
-            <CardContent className={`p-8 h-[calc(100vh-500px)] overflow-y-auto bg-[rgb(249,249,249)] rounded-xl box-content`} ref={transcriptContentRef}>
+          <Card className="p-8 bg-[rgb(249,249,249)]">
+            <CardContent className={`h-[calc(100vh-400px)] overflow-y-auto`} ref={transcriptContentRef}>
               <DialogueList
                 textChunks={transcriptTextChunks}
                 transcriptError={transcriptError}
@@ -125,7 +125,7 @@ function renderContent(isLoading: boolean, error: string | null, textChunks: str
       ) : (
         <div className="prose max-w-none h-full">
           {textChunks.length > 0 ? (
-            <ReactMarkdown className="p-8">{textChunks.join('')}</ReactMarkdown>
+            <ReactMarkdown>{textChunks.join('')}</ReactMarkdown>
           ) : (
             <div className="relative flex flex-col items-center justify-center h-full text-center relative overflow-hidden">
               <div className="transform transition-all duration-500">

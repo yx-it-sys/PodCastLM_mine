@@ -1,7 +1,9 @@
 <h1 align="center">欢迎来到 PodCastLM 👋</h1>
 
 ## ✨ 示例
-[/public/demo.mp4](https://github.com/user-attachments/assets/ed846901-069e-48c5-8576-01b017cd581a)
+[demo.mp4](https://github.com/user-attachments/assets/ed846901-069e-48c5-8576-01b017cd581a)
+
+[audio demo](./example/demo.mp3)
 
 在线地址: ⚡️ [PodCastLM](https://endearing-rabanadas-2ee528.netlify.app.)
 

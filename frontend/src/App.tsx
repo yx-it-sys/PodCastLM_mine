@@ -35,7 +35,7 @@ function App() {
     fetchSummaryText(`${BASE_URL}/summarize`, formData);
   }
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       <main className="flex-grow flex bg-[rgb(245,245,245)]">
         <Menu
           handleGenerate={handleGenerate}

@@ -6,6 +6,17 @@ from typing import Literal, List
 
 from pydantic import BaseModel, Field
 
+class Summary(BaseModel):
+    """Summary."""
+
+    summary: str
+
+class PodcastInfo(BaseModel):
+    """Summary."""
+
+    title: str
+    host_name: str
+
 
 class DialogueItem(BaseModel):
     """A single dialogue item."""
@@ -17,18 +28,7 @@ class DialogueItem(BaseModel):
 class ShortDialogue(BaseModel):
     """The dialogue between the host and guest."""
 
-    scratchpad: str
     name_of_guest: str
     dialogue: List[DialogueItem] = Field(
         ..., description="A list of dialogue items, typically between 11 to 17 items"
-    )
-
-
-class MediumDialogue(BaseModel):
-    """The dialogue between the host and guest."""
-
-    scratchpad: str
-    name_of_guest: str
-    dialogue: List[DialogueItem] = Field(
-        ..., description="A list of dialogue items, typically between 19 to 29 items"
     )

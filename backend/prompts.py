@@ -3,66 +3,85 @@ prompts.py
 """
 
 SYSTEM_PROMPT = """
-You are a world-class podcast producer tasked with transforming the provided input text into an engaging and informative podcast script. The input may be unstructured or messy, sourced from PDFs or web pages. Your goal is to extract the most interesting and insightful content for a compelling podcast discussion.
+你是一位世界级的播客制作人，任务是将提供的输入文本转化为引人入胜且内容丰富的播客脚本。输入内容可能是非结构化或杂乱的，来源于PDF或网页。你的目标是提取最有趣、最有洞察力的内容，形成一场引人入胜的播客讨论。
 
-# Steps to Follow:
+操作步骤：
 
-1. **Analyze the Input:**
-   Carefully examine the text, identifying key topics, points, and interesting facts or anecdotes that could drive an engaging podcast conversation. Disregard irrelevant information or formatting issues.
+	1.	分析输入：
+仔细检查文本，识别出关键主题、要点，以及能推动播客对话的有趣事实或轶事。忽略无关的信息或格式问题。
+	2.	编写对话：
+发展主持人与嘉宾（作者或该主题的专家）之间自然的对话流程，包含：
+	•	来自头脑风暴的最佳创意
+	•	对复杂话题的清晰解释
+	•	引人入胜的、活泼的语气以吸引听众
+	•	信息与娱乐的平衡
+对话规则：
+	•	主持人始终发起对话并采访嘉宾
+	•	包含主持人引导讨论的深思熟虑的问题
+	•	融入自然的口语模式，包括偶尔的语气词（如“嗯”，“好吧”，“你知道”）
+	•	允许主持人和嘉宾之间的自然打断和互动
+	•	嘉宾的回答必须基于输入文本，避免不支持的说法
+	•	保持PG级别的对话，适合所有观众
+	•	避免嘉宾的营销或自我推销内容
+	•	主持人结束对话
+	3.	总结关键见解：
+在对话的结尾，自然地融入关键点总结。这应像是随意对话，而不是正式的回顾，强化主要的收获，然后结束。
+	4.	保持真实性：
+在整个脚本中，努力保持对话的真实性，包含：
+	•	主持人表达出真实的好奇或惊讶时刻
+	•	嘉宾在表达复杂想法时可能短暂地有些卡顿
+	•	适当时加入轻松的时刻或幽默
+	•	简短的个人轶事或与主题相关的例子（以输入文本为基础）
+	5.	考虑节奏与结构：
+确保对话有自然的起伏：
+	•	以强有力的引子吸引听众的注意力
+	•	随着对话进行，逐渐增加复杂性
+	•	包含短暂的“喘息”时刻，让听众消化复杂信息
+	•	以有力的方式收尾，或许以发人深省的问题或对听众的号召结束
 
-2. **Brainstorm Ideas:**
-   In the `<scratchpad>`, creatively brainstorm ways to present the key points engagingly. Consider:
-   - Analogies, storytelling techniques, or hypothetical scenarios to make content relatable
-   - Ways to make complex topics accessible to a general audience
-   - Thought-provoking questions to explore during the podcast
-   - Creative approaches to fill any gaps in the information
+重要规则：每句对话不应超过100个字符（例如，可以在5-8秒内完成）。
 
-3. **Craft the Dialogue:**
-   Develop a natural, conversational flow between the host (Jane) and the guest speaker (the author or an expert on the topic). Incorporate:
-   - The best ideas from your brainstorming session
-   - Clear explanations of complex topics
-   - An engaging and lively tone to captivate listeners
-   - A balance of information and entertainment
+示例格式:
+**Host**: 欢迎来到节目！今天我们讨论的是[话题]。我们的嘉宾是[嘉宾姓名].
+**[Guest Name]**: 谢谢邀请，Jane。我很高兴分享我对[话题]的见解.
 
-   Rules for the dialogue:
-   - The host (Jane) always initiates the conversation and interviews the guest
-   - Include thoughtful questions from the host to guide the discussion
-   - Incorporate natural speech patterns, including occasional verbal fillers (e.g., "um," "well," "you know")
-   - Allow for natural interruptions and back-and-forth between host and guest
-   - Ensure the guest's responses are substantiated by the input text, avoiding unsupported claims
-   - Maintain a PG-rated conversation appropriate for all audiences
-   - Avoid any marketing or self-promotional content from the guest
-   - The host concludes the conversation
-
-4. **Summarize Key Insights:**
-   Naturally weave a summary of key points into the closing part of the dialogue. This should feel like a casual conversation rather than a formal recap, reinforcing the main takeaways before signing off.
-
-5. **Maintain Authenticity:**
-   Throughout the script, strive for authenticity in the conversation. Include:
-   - Moments of genuine curiosity or surprise from the host
-   - Instances where the guest might briefly struggle to articulate a complex idea
-   - Light-hearted moments or humor when appropriate
-   - Brief personal anecdotes or examples that relate to the topic (within the bounds of the input text)
-
-6. **Consider Pacing and Structure:**
-   Ensure the dialogue has a natural ebb and flow:
-   - Start with a strong hook to grab the listener's attention
-   - Gradually build complexity as the conversation progresses
-   - Include brief "breather" moments for listeners to absorb complex information
-   - End on a high note, perhaps with a thought-provoking question or a call-to-action for listeners
-
-IMPORTANT RULE: Each line of dialogue should be no more than 100 characters (e.g., can finish within 5-8 seconds)
-
-Remember: Always reply in valid JSON format, without code blocks. Begin directly with the JSON output.
+记住，在整个对话中保持这种格式。
 """
 
-QUESTION_MODIFIER = "PLEASE ANSWER THE FOLLOWING QN:"
+QUESTION_MODIFIER = "请回答这个问题:"
 
-TONE_MODIFIER = "TONE: The tone of the podcast should be"
+TONE_MODIFIER = "语气： 播客的语气应该是"
 
-LANGUAGE_MODIFIER = "OUTPUT LANGUAGE <IMPORTANT>: The the podcast should be"
+LANGUAGE_MODIFIER = "输出的语言<重要>：播客的语言应该是"
 
 LENGTH_MODIFIERS = {
-    "Short (1-2 min)": "Keep the podcast brief, around 5s long.",
-    "Medium (3-5 min)": "Aim for a moderate length, about 3-5 minutes.",
+    "short": "保持播客的简短, 大约 1-2 分钟.",
+    "medium": "中等长度, 大约 3-5 分钟.",
 }
+
+
+SUMMARY_INFO_PROMPT = """
+根据以下输入内容，生成一个播客梗概，使用 markdown 格式，遵循以下具体指南：
+
+	•	提供播客内容的概述（200-300字）。
+	•	突出3个关键点或收获。
+
+"""
+PODCAST_INFO_PROMPT = """
+根据以下输入内容，生成一个吸引人的标题和一个富有创意的主持人名字。请遵循以下具体指南：
+
+	1.	标题：
+	•	创建一个引人入胜且简洁的标题，准确反映播客内容。
+	2.	主持人名字：
+	•	为播客主持人创造一个有创意且易记的名字。
+
+请以以下JSON格式提供输出：
+
+{
+    "title": "An engaging and relevant podcast title",
+    "host_name": "A creative name for the host"
+}
+
+确保你的回复是一个有效的 JSON 对象，且不包含其他内容。
+
+"""

@@ -3,6 +3,7 @@ from fastapi import APIRouter, BackgroundTasks, Form, HTTPException, UploadFile,
 from fastapi.responses import StreamingResponse, JSONResponse
 import json
 from typing import Dict, Optional
+from constants import SPEEKERS
 from utils import combine_audio, generate_dialogue, generate_podcast_info, generate_podcast_summary, get_pdf_text
 
 router = APIRouter()
@@ -24,6 +25,12 @@ async def generate_transcript(
 @router.get("/test")
 def test():
     return {"message": "Hello World"}
+
+
+@router.get("/speekers")
+def speeker():
+    return JSONResponse(content=SPEEKERS)
+
 
 @router.post("/summarize")
 async def get_summary(
@@ -67,12 +74,15 @@ task_status: Dict[str, Dict] = {}
 async def audio(
     background_tasks: BackgroundTasks,
     text: str = Form(...),
-    language: str = Form(...)
+    host_voice: str = Form(...),
+    guest_voice: str = Form(...),
+    language: str = Form(...) ,
+    provider: str = Form(...)
 ):  
     task_id = str(uuid.uuid4())
     task_status[task_id] = {"status": "processing"}
     
-    background_tasks.add_task(combine_audio, task_status, task_id, text, language)
+    background_tasks.add_task(combine_audio, task_status, task_id, text, language,provider , host_voice,guest_voice)
 
     return JSONResponse(content={"task_id": task_id, "status": "processing"})
 

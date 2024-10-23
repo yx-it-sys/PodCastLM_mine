@@ -9,6 +9,7 @@ import hashlib
 from typing import Any, Dict, Generator
 import uuid
 from openai import OpenAI
+from fishaudio import fishaudio_tts
 from prompts import LANGUAGE_MODIFIER, LENGTH_MODIFIERS, PODCAST_INFO_PROMPT, QUESTION_MODIFIER, SUMMARY_INFO_PROMPT, SYSTEM_PROMPT, TONE_MODIFIER
 import json
 from pydub import AudioSegment
@@ -49,10 +50,12 @@ def generate_dialogue(pdfFile, textInput, tone, duration, language) -> Generator
         
     yield json.dumps({"type": "final", "content": full_response})
 
-async def process_line(line, voice):
-    return await generate_podcast_audio(line['content'], voice)
+async def process_line(line, voice,provider):
+    if provider == 'fishaudio':
+        return await generate_podcast_audio(line['content'], voice)
+    return await generate_podcast_audio_by_azure(line['content'], voice)
 
-async def generate_podcast_audio(text: str, voice: str) -> str:
+async def generate_podcast_audio_by_azure(text: str, voice: str) -> str:
     try:
         speech_config = speechsdk.SpeechConfig(subscription=SPEECH_KEY, region=SPEECH_REGION)
         speech_config.speech_synthesis_voice_name = voice
@@ -80,7 +83,27 @@ async def generate_podcast_audio(text: str, voice: str) -> str:
         print(f"Error in generate_podcast_audio: {e}")
         raise
 
-async def combine_audio(task_status: Dict[str, Dict], task_id: str, text: str, language: str) -> Generator[str, None, None]:
+async def generate_podcast_audio(text: str, voice: str) -> str:
+    return await generate_podcast_audio_by_fish(text,voice) 
+
+async def generate_podcast_audio_by_fish(text: str, voice: str) -> str:
+    try: 
+        return fishaudio_tts(text=text,reference_id=voice)
+    except Exception as e:
+        print(f"Error in generate_podcast_audio: {e}")
+        raise
+async def process_lines_with_limit(lines, provider , host_voice, guest_voice, max_concurrency):
+    semaphore = asyncio.Semaphore(max_concurrency)
+
+    async def limited_process_line(line):
+        async with semaphore:
+            voice = host_voice if (line['speaker'] == '主持人' or line['speaker'] == 'Host') else guest_voice
+            return await process_line(line, voice , provider)
+
+    tasks = [limited_process_line(line) for line in lines]
+    results = await asyncio.gather(*tasks)
+    return results
+async def combine_audio(task_status: Dict[str, Dict], task_id: str, text: str, language: str , provider:str,host_voice: str , guest_voice:str) -> Generator[str, None, None]:
     try:
         dialogue_regex = r'\*\*([\s\S]*?)\*\*[:：]\s*([\s\S]*?)(?=\*\*|$)'
         matches = re.findall(dialogue_regex, text, re.DOTALL)
@@ -93,13 +116,11 @@ async def combine_audio(task_status: Dict[str, Dict], task_id: str, text: str, l
         for match in matches
         ]
 
-        host_voice = "zh-CN-YunxiNeural"
-        guest_voice = "zh-CN-YunzeNeural"
-
         print("Starting audio generation")
-        audio_segments = await asyncio.gather(
-            *[process_line(line, host_voice if line['speaker'] == '主持人' else guest_voice) for line in lines]
-        )
+        # audio_segments = await asyncio.gather(
+        #     *[process_line(line, host_voice if line['speaker'] == '主持人' else guest_voice) for line in lines]
+        # )
+        audio_segments = await process_lines_with_limit(lines, host_voice, guest_voice, 10 if provider=='azure' else 5)
         print("Audio generation completed")
 
         # 合并音频

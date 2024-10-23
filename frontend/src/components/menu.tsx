@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, {  useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Upload, FileText, Mic, Clock, Globe, Sparkles } from "lucide-react";
+import { Card, CardContent } from './ui/card';
+import { useSpeeker } from '@/hooks/useSpeeker';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 const DEMO_PDF_URL = '/demo.pdf'; // 替换为你的演示 PDF 文件的实际路径
@@ -13,7 +15,13 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
   const [tone, setTone] = useState('neutral');
   const [duration, setDuration] = useState('short');
   const [language, setLanguage] = useState('Chinese');
+  const [hostVoice, setHostVoice] = useState('zh-CN-YunxiNeural');
+  const [guestVoice, setGuestVoice] = useState('zh-CN-YunzeNeural');
+  const [provider, setProvider] = useState('azure');
   const [fileError, setFileError] = useState<string | null>(null);
+  const speekerReq = useSpeeker()
+
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -53,21 +61,23 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
     formData.append('tone', tone);
     formData.append('duration', duration);
     formData.append('language', language);
+    formData.append('hostVoice', hostVoice);
+    formData.append('guestVoice', guestVoice);
 
     handleGenerate(formData);
   };
 
   return (
     <div className="w-full md:w-1/5 p-6 border-r rounded-2xl m-3 border-gray-200 bg-white flex flex-col text-gray-800 hidden md:flex shadow-lg shadow-gray-300/50">
-      <div className="flex-grow overflow-y-auto space-y-8">
+      <div className="flex-grow flex-1 h-1 overflow-y-auto space-y-8">
         <div className="transition-all duration-300">
           <h2 className="text-sm font-semibold mb-3 flex items-center"><Upload className="mr-2 text-gray-600" size={20} /> 上传 PDF *</h2>
           <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-gray-400 bg-white hover:bg-gray-50 transition-all duration-300">
-            <input 
-              type="file" 
-              accept=".pdf" 
-              className="hidden" 
-              id="pdf-upload" 
+            <input
+              type="file"
+              accept=".pdf"
+              className="hidden"
+              id="pdf-upload"
               onChange={handleFileChange}
             />
             <label htmlFor="pdf-upload" className="cursor-pointer">
@@ -94,9 +104,9 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
 
         <div>
           <h2 className="text-sm font-semibold mb-3 flex items-center"><FileText className="mr-2 text-gray-600" size={20} /> 问题</h2>
-          <Textarea 
-            style={{"resize": "none"}}
-            placeholder="说点什么..." 
+          <Textarea
+            style={{ "resize": "none" }}
+            placeholder="说点什么..."
             className="w-full h-40 bg-white border-gray-200 text-gray-800 rounded-xl focus:border-gray-400 focus:ring-gray-400"
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}
@@ -106,7 +116,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
           <h2 className="text-sm font-semibold mb-3 flex items-center"><Mic className="mr-2 text-gray-600" size={20} /> 语气</h2>
           <Select onValueChange={setTone}>
             <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
-              <SelectValue placeholder="中立" defaultValue={tone}/>
+              <SelectValue placeholder="中立" defaultValue={tone} />
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl" >
               <SelectItem value="neutral" className="cursor-pointer hover:bg-gray-100">中立</SelectItem>
@@ -121,7 +131,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
           <h2 className="text-sm font-semibold mb-3 flex items-center"><Clock className="mr-2 text-gray-600" size={20} /> 时长</h2>
           <Select onValueChange={setDuration}>
             <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
-              <SelectValue placeholder="短对话 (1-2分钟)" defaultValue={duration}/>
+              <SelectValue placeholder="短对话 (1-2分钟)" defaultValue={duration} />
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl">
               <SelectItem value="short" className="cursor-pointer  hover:bg-gray-100">短对话 (1-2分钟)</SelectItem>
@@ -134,7 +144,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
           <h2 className="text-sm font-semibold mb-3 flex items-center"><Globe className="mr-2 text-gray-600" size={20} /> 语言</h2>
           <Select onValueChange={setLanguage}>
             <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
-              <SelectValue placeholder="中文" defaultValue={language}/>
+              <SelectValue placeholder="中文" defaultValue={language} />
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-200 rounded-xl">
               <SelectItem value="English" className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-gray-100">英文</SelectItem>
@@ -142,16 +152,74 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
             </SelectContent>
           </Select>
         </div>
+
+        {speekerReq.data && <div>
+          <h2 className="text-sm font-semibold mb-3 flex items-center"><Globe className="mr-2 text-gray-600" size={20} /> 声音</h2>
+          <Card >
+            <CardContent className='p-3'>
+              <h2 className="text-sm font-semibold mb-3 flex items-center">Provider</h2>
+              <Select  value={provider} onValueChange={newProvider=>{
+                setProvider(newProvider)
+                const voices = speekerReq.data?.[newProvider];
+                if(voices){
+                  setHostVoice(voices[0].id)
+                  setGuestVoice(voices[1].id)
+                }
+              }}>
+                <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
+                  <SelectValue placeholder="Host" defaultValue={provider} />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-gray-200 rounded-xl mt-3">
+                  {
+                   Object.keys(speekerReq.data ?? {}).map(item => <SelectItem
+                      key={item}
+                      value={item}
+                      className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-gray-100">{item}</SelectItem>)
+                  }
+                </SelectContent>
+              </Select>
+              <h2 className="text-sm font-semibold mb-3 flex items-center">Host</h2>
+              <Select value={hostVoice} onValueChange={setHostVoice}>
+                <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
+                  <SelectValue placeholder="Host" defaultValue={hostVoice} />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-gray-200 rounded-xl">
+                  {
+                    speekerReq.data?.[provider].map(item => <SelectItem
+                      key={item.id}
+                      value={item.id}
+                      className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-gray-100">{item.name}</SelectItem>)
+                  }
+                </SelectContent>
+              </Select>
+              <h2 className="text-sm font-semibold mb-3 flex items-center">Guest</h2>
+              <Select value={guestVoice} onValueChange={setGuestVoice}>
+                <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 rounded-xl">
+                  <SelectValue placeholder="Guest" defaultValue={guestVoice} />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-gray-200 rounded-xl">
+                  {
+
+                    speekerReq.data?.[provider].map(item => <SelectItem
+                      key={item.id}
+                      value={item.id}
+                      className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-gray-100">{item.name}</SelectItem>)
+                  }
+                </SelectContent>
+              </Select>
+            </CardContent>
+          </Card>
+        </div>}
       </div>
 
       <div className="mt-6">
-        <Button 
+        <Button
           disabled={isGenerating}
           className={`
             w-full rounded-xl transition-all duration-300 transform hover:scale-105
             flex items-center justify-center space-x-2
-            ${isGenerating 
-              ? 'bg-blue-300 cursor-not-allowed' 
+            ${isGenerating
+              ? 'bg-blue-300 cursor-not-allowed'
               : 'bg-blue-500 hover:bg-blue-600 active:bg-blue-700'}
             text-white font-semibold py-3 px-6 shadow-lg hover:shadow-xl
           `}

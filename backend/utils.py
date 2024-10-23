@@ -120,7 +120,7 @@ async def combine_audio(task_status: Dict[str, Dict], task_id: str, text: str, l
         # audio_segments = await asyncio.gather(
         #     *[process_line(line, host_voice if line['speaker'] == '主持人' else guest_voice) for line in lines]
         # )
-        audio_segments = await process_lines_with_limit(lines, host_voice, guest_voice, 10 if provider=='azure' else 5)
+        audio_segments = await process_lines_with_limit(lines,provider, host_voice, guest_voice, 10 if provider=='azure' else 5)
         print("Audio generation completed")
 
         # 合并音频

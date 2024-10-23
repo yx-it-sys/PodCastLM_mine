@@ -68,6 +68,7 @@ export default function Content({
         audioFormData.append('language', formData.get('language') as string);
         audioFormData.append('host_voice', formData.get('hostVoice') as string);
         audioFormData.append('guest_voice', formData.get('guestVoice') as string);
+        audioFormData.append('provider', formData.get('provider') as string);
 
         generateAudio(audioFormData)
       }

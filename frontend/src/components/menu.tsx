@@ -63,6 +63,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
     formData.append('language', language);
     formData.append('hostVoice', hostVoice);
     formData.append('guestVoice', guestVoice);
+    formData.append('provider', provider);
 
     handleGenerate(formData);
   };

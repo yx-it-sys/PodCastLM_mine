@@ -22,7 +22,6 @@ def fishaudio_tts(text, reference_id=None) -> AudioSegment:
     :param reference_id: 可选参数，使用的模型 ID
     :return: 返回生成的语音的AudioSegment对象
     """
-    print("reference_id:", reference_id)
     session = Session(FISHAUDIO_KEY)
     audio_buffer = io.BytesIO()
     for chunk in session.tts(TTSRequest(

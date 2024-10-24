@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Upload, FileText, Mic, Clock, Globe, Sparkles } from "lucide-react";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 5MB in bytes
 const DEMO_PDF_URL = '/demo.pdf'; // 替换为你的演示 PDF 文件的实际路径
 
 export default function Menu({ handleGenerate, isGenerating }: { handleGenerate: (formData: FormData) => void, isGenerating: boolean }) {
@@ -76,7 +76,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
                 {pdfFile ? pdfFile.name : "Click to upload PDF"}
               </p>
               <p className="mt-1 text-xs text-gray-500">
-                PDF 文件不应超过 5MB
+                PDF 文件不应超过 1 MB
               </p>
             </label>
           </div>

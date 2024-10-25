@@ -4,6 +4,7 @@ import Menu from "./components/menu";
 import { useJsonData } from "./hooks/useJsonData";
 import { useStreamText } from './hooks/useStreamText';
 import { BASE_URL } from "./lib/constant";
+import MobileMenu from "./components/mobile-menu";
 
 function App() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -23,7 +24,7 @@ function App() {
     data: podInfoData,
     error: podInfoError,
     isLoading: isPodInfoLoading,
-    fetchJsonData: fetchPodInfo, 
+    fetchJsonData: fetchPodInfo,
   } = useJsonData();
 
 
@@ -37,13 +38,13 @@ function App() {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <main className="flex-grow flex bg-[rgb(245,245,245)] h-full">
-        <Menu
+        <Menu className="hidden md:flex "
           handleGenerate={handleGenerate}
           isGenerating={isGenerating}
-          />
+        />
         <Content
           summaryTextChunks={summaryTextChunks}
-          summaryFinalResult={summaryFinalResult} 
+          summaryFinalResult={summaryFinalResult}
           isSummaryLoading={isSummaryLoading}
           summaryError={summaryError}
           isSummaryDone={isSummaryDone}
@@ -55,6 +56,10 @@ function App() {
           formData={formData!}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          mobileMenu={<MobileMenu
+            handleGenerate={handleGenerate}
+            isGenerating={isGenerating}
+          />}
         />
       </main>
     </div>

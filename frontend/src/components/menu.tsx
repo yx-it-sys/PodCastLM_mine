@@ -9,7 +9,7 @@ import { useSpeeker } from '@/hooks/useSpeeker';
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 5MB in bytes
 const DEMO_PDF_URL = '/demo.pdf'; // 替换为你的演示 PDF 文件的实际路径
 
-export default function Menu({ handleGenerate, isGenerating }: { handleGenerate: (formData: FormData) => void, isGenerating: boolean }) {
+export default function Menu({ handleGenerate,className, isGenerating }: { className?:string,handleGenerate: (formData: FormData) => void, isGenerating: boolean }) {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [textInput, setTextInput] = useState('');
   const [tone, setTone] = useState('neutral');
@@ -69,7 +69,7 @@ export default function Menu({ handleGenerate, isGenerating }: { handleGenerate:
   };
 
   return (
-    <div className="w-full md:w-1/5 p-6 border-r rounded-2xl m-3 border-gray-200 bg-white flex flex-col text-gray-800 hidden md:flex shadow-lg shadow-gray-300/50">
+    <div className={`w-full md:w-1/5 p-6 border-r rounded-2xl m-3 h-full border-gray-200 bg-white flex flex-col text-gray-800 flex shadow-lg shadow-gray-300/50 ${className??''}`}>
       <div className="flex-grow flex-1 h-1 overflow-y-auto space-y-8">
         <div className="transition-all duration-300">
           <h2 className="text-sm font-semibold mb-3 flex items-center"><Upload className="mr-2 text-gray-600" size={20} /> 上传 PDF *</h2>

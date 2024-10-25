@@ -10,6 +10,17 @@
   --rm-audio-player-interface-container: #fff;
   --primary: 240 5.9% 10%;
 }
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
 
 .kuNzeN img {
   border-radius: 100% !important;

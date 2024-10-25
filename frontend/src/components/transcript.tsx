@@ -45,8 +45,8 @@ export default function Transcript({
   }, [transcriptTextChunks]);
 
   return (
-    <div className="w-full px-12 py-6 overflow-hidden">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+    <div className="w-full p-2 md:px-12 md:py-6 overflow-hidden h-full ">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full h-full flex flex-col">
         <div className="flex justify-center mb-4">
           <TabsList className="inline-flex bg-gray-200 rounded-xl p-1">
             <TabsTrigger 
@@ -63,11 +63,9 @@ export default function Transcript({
             </TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value="summary">
-          <Card className="p-8 bg-[rgb(249,249,249)]">
-            <CardContent
-              className={`h-[calc(100vh-400px)] overflow-y-auto`}
-              ref={summaryContentRef}
+        <TabsContent className="flex-1 h-1" value="summary">
+          <Card  ref={summaryContentRef} className="p-2 h-full md:p-8 bg-[rgb(249,249,249)] overflow-y-auto">
+            <CardContent  
             >
               {
                 renderContent(
@@ -78,9 +76,9 @@ export default function Transcript({
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="transcript">
-          <Card className="p-8 bg-[rgb(249,249,249)]">
-            <CardContent className={`h-[calc(100vh-400px)] overflow-y-auto`} ref={transcriptContentRef}>
+        <TabsContent className="flex-1 h-1" value="transcript">
+          <Card  ref={transcriptContentRef} className="p-2 h-full md:p-8 bg-[rgb(249,249,249)] overflow-y-auto" >
+            <CardContent >
               <DialogueList
                 textChunks={transcriptTextChunks}
                 transcriptError={transcriptError}

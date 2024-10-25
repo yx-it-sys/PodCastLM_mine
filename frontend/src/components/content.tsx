@@ -1,7 +1,7 @@
 import Episode from "./episode";
 import Audio from "./audio";
 import Transcript from "./transcript";
-import { useEffect } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 import { BASE_URL } from "@/lib/constant";
 import { useStreamText } from "@/hooks/useStreamText";
 import { useAudioGeneration } from "@/hooks/useTaskData";
@@ -22,6 +22,7 @@ interface ContentProps {
   formData: FormData
   activeTab: string;
   setActiveTab: (activeTab: string) => void;
+  mobileMenu?:React.ReactNode;
 }
 export default function Content({
   formData,
@@ -35,7 +36,8 @@ export default function Content({
   setIsGenerating,
   activeTab,
   setActiveTab,
-}: ContentProps) {
+  mobileMenu
+}:ContentProps ) {
   const {
     error: audioError,
     isLoading: isAudioLoading,
@@ -93,9 +95,10 @@ export default function Content({
           isPodInfoLoading={isPodInfoLoading}
           podInfoError={podInfoError}
           podInfoData={podInfoData}
+          mobileMenu={mobileMenu}
         />
       </div>
-      <div className="flex-grow overflow-hidden">
+      <div className="flex-1 overflow-hidden h-1">
         <Transcript
           isSummaryLoading={isSummaryLoading}
           summaryError={summaryError}

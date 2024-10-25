@@ -1,7 +1,7 @@
 import Episode from "./episode";
 import Audio from "./audio";
 import Transcript from "./transcript";
-import React, { PropsWithChildren, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BASE_URL } from "@/lib/constant";
 import { useStreamText } from "@/hooks/useStreamText";
 import { useAudioGeneration } from "@/hooks/useTaskData";

@@ -1,7 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
-import MobileMenu from "./mobile-menu";
 import { ReactNode } from "react";
 
 interface EpisodeProps {

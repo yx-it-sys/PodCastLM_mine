@@ -24,6 +24,7 @@ from constants import (
     FIREWORKS_MAX_TOKENS,
     FIREWORKS_TEMPERATURE,
     GRADIO_CLEAR_CACHE_OLDER_THAN,
+    JINA_KEY,
     SPEECH_KEY,
     SPEECH_REGION,
 )
@@ -258,7 +259,7 @@ def get_link_text(url: str):
     """ 通过jina.ai 抓取url内容 """
     url  = f"https://r.jina.ai/{url}"
     headers = {}
-    headers['Authorization'] = 'Bearer jina_c1759c7f49e14ced990ac7776800dc44ShJNTXBCizzwjE7IMFYJ6LD960cG'
+    headers['Authorization'] = 'Bearer ' + JINA_KEY
     headers['Accept'] = 'application/json'
     headers['X-Return-Format'] = 'text'
     response = requests.get(url, headers=headers)

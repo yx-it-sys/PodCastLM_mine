@@ -5,10 +5,10 @@ import os
 import re
 import time
 import hashlib
-
 from typing import Any, Dict, Generator
 import uuid
 from openai import OpenAI
+import requests
 from fishaudio import fishaudio_tts
 from prompts import LANGUAGE_MODIFIER, LENGTH_MODIFIERS, PODCAST_INFO_PROMPT, QUESTION_MODIFIER, SUMMARY_INFO_PROMPT, SYSTEM_PROMPT, TONE_MODIFIER
 import json
@@ -253,6 +253,16 @@ pdf_cache = {}
 def clear_pdf_cache():
     global pdf_cache
     pdf_cache.clear()
+
+def get_link_text(url: str):
+    """ 通过jina.ai 抓取url内容 """
+    url  = f"https://r.jina.ai/{url}"
+    headers = {}
+    headers['Authorization'] = 'Bearer jina_c1759c7f49e14ced990ac7776800dc44ShJNTXBCizzwjE7IMFYJ6LD960cG'
+    headers['Accept'] = 'application/json'
+    headers['X-Return-Format'] = 'text'
+    response = requests.get(url, headers=headers)
+    return response.json()['data']
 
 async def get_pdf_text(pdf_file: UploadFile):
     text = ""

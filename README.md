@@ -48,7 +48,7 @@ Please ⭐️ this repository if this project helped you!
 
 Your appreciation is my greatest strength in updating content！
 
-<a href="https://www.buymeacoffee.com/zhangxiaoqian" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+<a href="https://ko-fi.com/zhangxiaoqian" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 ---
 

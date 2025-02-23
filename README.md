@@ -44,12 +44,3 @@
 
 ## 📝 License
 MIT License © 2024 YOYZHANG
-
-## 👀 说明
-小站最近入不敷出，因此开通赞赏渠道，您的支持是我最大的动力。若收益为 0，小站将于12月31日关闭服务，忘谅解。
-
-<img src="assets/money.png" style="width:270px; height:400px;"/>
-
----
-
-

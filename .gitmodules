@@ -1,0 +1,3 @@
+[submodule "backend/ChatTTS"]
+	path = backend/ChatTTS
+	url = https://github.com/2noise/ChatTTS

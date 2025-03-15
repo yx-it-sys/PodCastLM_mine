@@ -27,13 +27,14 @@ SPEECH_REGION = "japaneast"
 FISHAUDIO_KEY = os.getenv('FISHAUDIO_KEY')
 JINA_KEY = os.getenv('JINA_KEY','jina_c1759c7f49e14ced990ac7776800dc44ShJNTXBCizzwjE7IMFYJ6LD960cG')
 
-# Fireworks API-related constants
-FIREWORKS_API_KEY = os.getenv('FIREWORKS_API_KEY')
-FIREWORKS_BASE_URL = os.getenv('FIREWORKS_BASE_URL',"https://api.fireworks.ai/inference/v1")
-FIREWORKS_MAX_TOKENS = 16_384
-FIREWORKS_MODEL_ID = os.getenv('FIREWORKS_MODEL_ID',"accounts/fireworks/models/llama-v3p1-405b-instruct")
-FIREWORKS_TEMPERATURE = 0.1
-FIREWORKS_JSON_RETRY_ATTEMPTS = 3
+# DEEPSEEK API-related constants
+# DEEPSEEK_API_KEY = os.getenv('DEEPSEEK_API_KEY')
+DEEPSEEK_API_KEY = "sk-1df02573bd054434b1be6c7e3826a509"
+DEEPSEEK_BASE_URL = os.getenv('DEEPSEEK_BASE_URL',"https://api.deepseek.com/v1")
+DEEPSEEK_MAX_TOKENS = 16_384
+DEEPSEEK_MODEL_ID = os.getenv('DEEPSEEK_MODEL_ID',"accounts/SEEPSEEK/models/llama-v3p1-405b-instruct")
+DEEPSEEK_TEMPERATURE = 1.5
+DEEPSEEK_JSON_RETRY_ATTEMPTS = 3
 # Suno related constants
 SUNO_LANGUAGE_MAPPING = {
     "English": "en",

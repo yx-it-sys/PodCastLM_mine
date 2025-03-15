@@ -8,6 +8,11 @@ from constants import FISHAUDIO_KEY,FISHAUDIO_SPEEKER
 
 import random
 
+
+# 手动设置 FFmpeg 路径
+# AudioSegment.converter = "D:/ffmpeg-7.1.1-full_build/bin/ffmpeg.exe"  # 例如 "C:/ffmpeg/bin/ffmpeg.exe"
+# AudioSegment.ffprobe = "D:/ffmpeg-7.1.1-full_build/bin/ffmpeg.exe"  # 例如 "C:/ffmpeg/bin/ffprobe.exe"
+
 def get_adapter_speeker_id(speaker_name):
     speeker = FISHAUDIO_SPEEKER[0]
     if speaker_name != "主持人": 

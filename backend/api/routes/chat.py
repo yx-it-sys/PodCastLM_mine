@@ -38,6 +38,7 @@ def test():
 def speeker():
     return JSONResponse(content=SPEEKERS)
 
+
 @router.get("/jina")
 def jina():
     result = get_link_text("https://ui.shadcn.com/docs/components/select")
@@ -71,6 +72,7 @@ async def get_summary(
         ),
         media_type="application/json"
     )
+
 
 @router.post("/pod_info")
 async def get_pod_info(

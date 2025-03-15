@@ -1,11 +1,15 @@
+import ChatTTS
 import argparse
 import hashlib
 from PyPDF2 import PdfReader
 import io
-from utils import generate_dialogue, combine_audio
+from utils import generate_dialogue
 from prompts import SYSTEM_PROMPT, TONE_MODIFIER, LENGTH_MODIFIERS, LANGUAGE_MODIFIER
 import json
 import uuid
+import torch
+import torchaudio
+
 
 # 读取本地文件，用于测试代码
 pdf_cache = {}
@@ -41,6 +45,18 @@ def get_pdf_text1(pdf_file: str):
     except Exception as e:
         return {"error": str(e)}
 
+def combine_audio(texts : str):
+
+    chat = ChatTTS.Chat()
+    chat.load(compile=False) # Set to True for better performance
+
+    text = texts
+    wavs = chat.infer(text)
+    # 假设 wavs[0] 是一个 1D NumPy 数组
+    wav_tensor = torch.from_numpy(wavs[0])  # 转换为 PyTorch 张量
+    wav_tensor = wav_tensor.unsqueeze(0)    # 添加一个维度，变为 [1, samples]
+    torchaudio.save("output1.wav", wav_tensor, 24000)
+
 
 def main():
     parser = argparse.ArgumentParser(description="Run the Podcast System")
@@ -53,6 +69,7 @@ def main():
     tone = "happy"
     lens = "short"
     language = "Chinese"
+    # print(generate_dialogue(text, prompt, tone, lens, language))
     for chunk in generate_dialogue(text, prompt, tone, lens, language):
         # 解析 JSON 字符串
         chunk_data = json.loads(chunk)
@@ -64,10 +81,6 @@ def main():
             print("\nFinal response:", chunk_data["content"])
         elif chunk_data["type"] == "error":
             print("Error:", chunk_data["content"])
-    task_status = {}
-    task_id = str(uuid.uuid4())
-    provider = "chat-tts"
-    combine_audio(task_status, task_id, text, language, provider, )
 
 if __name__ == "__main__":
     main()

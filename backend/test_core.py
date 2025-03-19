@@ -1,4 +1,4 @@
-import ChatTTS
+import asyncio
 import argparse
 import hashlib
 from PyPDF2 import PdfReader
@@ -9,7 +9,8 @@ import json
 import uuid
 import torch
 import torchaudio
-
+import re
+from chattts import chat_tts
 
 # 读取本地文件，用于测试代码
 pdf_cache = {}
@@ -45,17 +46,42 @@ def get_pdf_text1(pdf_file: str):
     except Exception as e:
         return {"error": str(e)}
 
-def combine_audio(texts : str):
+def process_lines_with_limit_test(lines):
+    tensor_list = []
+    for line in lines:
+        voice = "man" if (line["speaker"] == "Host" or line["speaker"] == "主持人") else "woman"
+        print("lines ok")
+        tensor = chat_tts(line["content"], voice)
+        print(tensor.shape)
+        tensor_list.append(tensor)
+    final_wav_tensor = torch.cat(tensor_list, dim=0)
+    final_wav_tensor = final_wav_tensor.unsqueeze(0)    # 添加一个维度,变为 [1, samples]
+    return final_wav_tensor
 
-    chat = ChatTTS.Chat()
-    chat.load(compile=False) # Set to True for better performance
+def combine_audio_by_chattts(text: str):
+    try:
+        dialogue_regex = r'\*\*([\s\S]*?)\*\*[:：]\s*([\s\S]*?)(?=\*\*|$)'
+        matches = re.findall(dialogue_regex, text, re.DOTALL)
 
-    text = texts
-    wavs = chat.infer(text)
-    # 假设 wavs[0] 是一个 1D NumPy 数组
-    wav_tensor = torch.from_numpy(wavs[0])  # 转换为 PyTorch 张量
-    wav_tensor = wav_tensor.unsqueeze(0)    # 添加一个维度，变为 [1, samples]
-    torchaudio.save("output1.wav", wav_tensor, 24000)
+        lines = [
+            {
+                "speaker": match[0],
+                "content": match[1].strip(),
+            }
+            for match in matches
+        ]
+
+        print("Starting audio generation")
+        # audio_segments = await asyncio.gather(
+        #     *[process_line(line, host_voice if line['speaker'] == '主持人' else guest_voice) for line in lines]
+        # )
+        audio = process_lines_with_limit_test(lines)
+        print("Audio generation completed")
+        torchaudio.save("./audio/output3.wav", audio, 24000)
+
+    except Exception as e:
+        print(f"Fail to generate audio by chatTTS_Test:{e}")
+
 
 
 def main():
@@ -69,18 +95,21 @@ def main():
     tone = "happy"
     lens = "short"
     language = "Chinese"
-    # print(generate_dialogue(text, prompt, tone, lens, language))
+    full_response = ""
     for chunk in generate_dialogue(text, prompt, tone, lens, language):
         # 解析 JSON 字符串
         chunk_data = json.loads(chunk)
-
         # 提取 content 字段
         if chunk_data["type"] == "chunk":
+            full_response += chunk_data["content"]
             print(chunk_data["content"], end="")  # end="" 避免换行
-        elif chunk_data["type"] == "final":
-            print("\nFinal response:", chunk_data["content"])
         elif chunk_data["type"] == "error":
             print("Error:", chunk_data["content"])
+    # # with open("example.txt", "r", encoding="utf-8") as file:
+    # #     full_response = file.read()
+    print(full_response)
+    combine_audio_by_chattts(full_response)
+
 
 if __name__ == "__main__":
     main()

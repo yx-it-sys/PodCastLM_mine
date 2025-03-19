@@ -7,16 +7,22 @@ import time
 import hashlib
 from typing import Any, Dict, Generator
 import uuid
-from openai import OpenAI
 import requests
-from fishaudio import fishaudio_tts
-from prompts import LANGUAGE_MODIFIER, LENGTH_MODIFIERS, PODCAST_INFO_PROMPT, QUESTION_MODIFIER, SUMMARY_INFO_PROMPT, \
-    SYSTEM_PROMPT, TONE_MODIFIER
 import json
 from pydub import AudioSegment
 from fastapi import UploadFile
 from PyPDF2 import PdfReader
+import torch
+import torchaudio
+
+import azure.cognitiveservices.speech as speechsdk
+from openai import OpenAI
+import ChatTTS
+
 from schema import PodcastInfo, ShortDialogue, Summary
+from fishaudio import fishaudio_tts
+from prompts import LANGUAGE_MODIFIER, LENGTH_MODIFIERS, PODCAST_INFO_PROMPT, QUESTION_MODIFIER, SUMMARY_INFO_PROMPT, \
+    SYSTEM_PROMPT, TONE_MODIFIER
 from constants import (
     AUDIO_CACHE_DIR,
     DEEPSEEK_API_KEY,
@@ -29,7 +35,6 @@ from constants import (
     SPEECH_KEY,
     SPEECH_REGION,
 )
-import azure.cognitiveservices.speech as speechsdk
 
 fw_client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=DEEPSEEK_BASE_URL)
 
@@ -52,10 +57,78 @@ def generate_dialogue(pdfFile, textInput, tone, duration, language) -> Generator
     yield json.dumps({"type": "final", "content": full_response})
 
 
+def process_stream_generate_dialogue(pdfFile, textInput, tone, duration, language) -> Generator[str, None, None]:
+    modified_system_prompt = get_prompt(pdfFile, textInput, tone, duration, language)
+    if (modified_system_prompt == False):
+        yield json.dumps({
+            "type": "error",
+            "content": "Prompt is too long"
+        }) + "\n"
+        return
+    full_response = ""
+    llm_stream = call_llm_stream(SYSTEM_PROMPT, modified_system_prompt, ShortDialogue, isJSON=False)
+
+    buffer = []
+
+    for chunk in llm_stream:
+        data = json.loads(chunk)
+        content = data["content"]
+        buffer.append(content)
+
+        if data["type"] == "final":
+            break
+    
+    full_text = full_response.join(buffer)
+    return full_text
+
+
 async def process_line(line, voice, provider):
     if provider == 'fishaudio':
         return await generate_podcast_audio(line['content'], voice)
-    return await generate_podcast_audio_by_azure(line['content'], voice)
+    return await generate_podcast_audio_by_chattts(line['content'], voice)
+
+
+async def generate_podcast_audio_by_chattts(text: str, voice: str) -> str:
+    try:
+        chat = ChatTTS.Chat()
+        chat.load(compile=False) # Set to True for better performance
+        if(voice == "man"):
+            # 2. 加载高质量音色文件
+            p_spk_emb = torch.load('./timbres/seed_11_restored_emb.pt', map_location=torch.device('cpu'))
+        else:
+            p_spk_emb = torch.load('./timbres/seed_1528_restored_emb.pt', map_location=torch.device('cpu'))
+
+        '''To do:
+            1. How to control the timbre provided by ChatTTS with the param: voice?
+            2. How to code to solve this?
+        '''
+        rand_spk = chat.sample_random_speaker()
+        #print(rand_spk)  # save it for later timbre recovery
+        params_refine_text = ChatTTS.Chat.RefineTextParams(
+        prompt='[oral_2][laugh_0][break_6]',
+        )
+        params_infer_code = ChatTTS.Chat.InferCodeParams(
+            spk_emb=p_spk_emb,  # add sampled speaker
+            temperature=.3,  # using custom temperature
+            top_P=0.7,  # top P decode
+            top_K=20,  # top K decode
+        )
+        ###################################
+        # For word level manual control.
+        texts = text
+        wavs = chat.infer(text, skip_refine_text=True, params_refine_text=params_refine_text,
+                        params_infer_code=params_infer_code)
+        wav_tensor = torch.from_numpy(wavs[0])  # 转换为 PyTorch 张量
+        wav_tensor = wav_tensor.unsqueeze(0)    # 添加一个维度,变为 [1, samples]
+
+        audio_buffer = io.BytesIO()
+        torchaudio.save(audio_buffer, wav_tensor, 24000, format="mp3")
+        audio_buffer.seek(0)
+
+        return AudioSegment.from_file(audio_buffer, format="mp3")
+
+    except Exception as e:
+        print(f"Error in generate podcast audio by ChatTTS:{e}")
 
 
 async def generate_podcast_audio_by_azure(text: str, voice: str) -> str:
@@ -164,6 +237,62 @@ async def combine_audio(task_status: Dict[str, Dict], task_id: str, text: str, l
     except Exception as e:
         # 如果发生错误，更新状态为失败
         task_status[task_id] = {"status": "failed", "error": str(e)}
+
+async def combine_audio_test(text: str, language: str, provider: str,
+                        host_voice: str, guest_voice: str) -> Generator[str, None, None]:
+    try:
+        print("Start regex...\n")
+        dialogue_regex = r'\*\*([\s\S]*?)\*\*[:：]\s*([\s\S]*?)(?=\*\*|$)'
+        matches = re.findall(dialogue_regex, text, re.DOTALL)
+
+        lines = [
+            {
+                "speaker": match[0],
+                "content": match[1].strip(),
+            }
+            for match in matches
+        ]
+
+        print("Starting audio generation")
+        # audio_segments = await asyncio.gather(
+        #     *[process_line(line, host_voice if line['speaker'] == '主持人' else guest_voice) for line in lines]
+        # )
+        audio_segments = await process_lines_with_limit(lines, provider, host_voice, guest_voice,
+                                                        10 if provider == 'azure' else 5)
+        print("Audio generation completed")
+
+        # 合并音频
+        combined_audio = AudioSegment.empty()
+        for segment in audio_segments:
+            combined_audio += segment
+        #combined_audio = await asyncio.to_thread(sum, audio_segments)
+        print("Audio combined")
+
+        # 只在最后写入文件
+        unique_filename = f"{uuid.uuid4()}.mp3"
+
+        print("Write finished!")
+        os.makedirs(AUDIO_CACHE_DIR, exist_ok=True)
+        file_path = os.path.join(AUDIO_CACHE_DIR, unique_filename)
+
+        # 异步导出音频文件
+        await asyncio.to_thread(combined_audio.export, file_path, format="mp3")
+        print("export finished!")
+        audio_url = f"./audio/{unique_filename}"
+        for file in glob.glob(f"{AUDIO_CACHE_DIR}*.mp3"):
+            if (
+                    os.path.isfile(file)
+                    and time.time() - os.path.getmtime(file) > GRADIO_CLEAR_CACHE_OLDER_THAN
+            ):
+                os.remove, file
+        print("glob finished")
+
+        clear_pdf_cache()
+        return audio_url
+
+    except Exception as e:
+        # 如果发生错误，更新状态为失败
+        print(f"Error in combine audio:{e}")
 
 
 def generate_podcast_summary(pdf_content: str, text: str, tone: str, length: str, language: str) -> Generator[

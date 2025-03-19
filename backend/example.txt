@@ -1,0 +1,21 @@
+**Host**: 欢迎来到节目! 今天我们讨论的是[uv_break]AI生成播客的未来. 我们的嘉宾是[uv_break]AI技术专家李明.
+
+**[Li Ming]**: [laugh]谢谢邀请, Jane. 我很高兴分享我对[uv_break]AI生成播客的见解.
+
+**Host**: 李明, 你能解释一下为什么播客现在这么火吗?
+
+**[Li Ming]**: 当然. 播客把文字变成声音, 更容易吸收. 而且, 它让学习变得有趣.
+
+**Host**: 那AI在播客中扮演什么角色呢?
+
+**[Li Ming]**: AI可以定制播客, 满足个人兴趣[uv_break]. 比如, [uv_break]Google的[uv_break]NoteBook[uv_break]LM就能生成专业播客.
+
+**Host**: 听起来很酷! 但中文播客呢?
+
+**[Li Ming]**: 目前[uv_break]NoteBookLM只支持英文[uv_break]. 但中文市场很大, 需求强烈.
+
+**Host**: 未来播客会怎样发展?
+
+**[Li Ming]**: 随着[uv_break]AIGC技术成熟, 播客将更灵活[laugh]. 可能还会有视频播客.
+
+**Host**: 太棒了! 感谢李明的分享. 大家觉得未来的播客会是什么样子呢? 欢迎留言讨论!

@@ -1,12 +1,10 @@
-import asyncio
 import argparse
 import hashlib
 from PyPDF2 import PdfReader
 import io
 from utils import generate_dialogue
-from prompts import SYSTEM_PROMPT, TONE_MODIFIER, LENGTH_MODIFIERS, LANGUAGE_MODIFIER
+from prompts import SYSTEM_PROMPT
 import json
-import uuid
 import torch
 import torchaudio
 import re
@@ -105,9 +103,10 @@ def main():
             print(chunk_data["content"], end="")  # end="" 避免换行
         elif chunk_data["type"] == "error":
             print("Error:", chunk_data["content"])
+
     # # with open("example.txt", "r", encoding="utf-8") as file:
     # #     full_response = file.read()
-    print(full_response)
+
     combine_audio_by_chattts(full_response)
 
 
